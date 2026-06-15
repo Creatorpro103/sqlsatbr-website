@@ -19,13 +19,13 @@ Install [Hugo](https://gohugo.io/installation/) locally, then run:
 hugo server
 ```
 
-Because the configured `baseURL` includes `/sqlsatbr-website/` for GitHub Pages, open the local preview at:
+With the custom domain configuration in place, open the local preview at:
 
 ```text
-http://localhost:1313/sqlsatbr-website/
+http://localhost:1313/
 ```
 
-If you want the local preview to live at the root instead, run:
+If you want to override the published base URL explicitly while previewing locally, run:
 
 ```powershell
 hugo server --baseURL http://localhost:1313/
@@ -36,3 +36,24 @@ To create the production build locally, run:
 ```powershell
 hugo
 ```
+
+## Custom domain cutover
+
+The production **Canonical Domain** is `https://www.dayofdatabr.org/`.
+
+This repository now carries the site-side domain configuration:
+
+1. `hugo.yaml` publishes with the `www.dayofdatabr.org` base URL.
+2. `static/CNAME` configures the GitHub Pages custom domain.
+3. The base layout performs host-based redirects for:
+   - `dayofdatabr.org` -> `https://www.dayofdatabr.org`
+   - `register.dayofdatabr.org` -> `https://dayofdatabr26.eventbrite.com/`
+   - `callforspeakers.dayofdatabr.org` -> `https://sessionize.com/api/v2/ocxfgd65/view/Speakers?under=True`
+
+The current `callforspeakers` target uses the event-specific Sessionize speakers endpoint exposed by the live site's existing Sessionize embed.
+
+Remaining human-owned cutover steps:
+
+1. Point `www.dayofdatabr.org` at GitHub Pages for this repository's published site.
+2. Point `dayofdatabr.org`, `register.dayofdatabr.org`, and `callforspeakers.dayofdatabr.org` at the same GitHub Pages host so the site can serve the redirect logic.
+3. In the repository's GitHub Pages settings, confirm `www.dayofdatabr.org` as the custom domain and enable HTTPS after DNS settles.

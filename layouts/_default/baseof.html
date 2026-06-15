@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ if .Title }}{{ .Title }} | {{ end }}{{ site.Title }}</title>
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.tagline }}{{ end }}">
+    <script>
+      (function () {
+        var host = window.location.hostname.toLowerCase();
+        var target = null;
+
+        if (host === "dayofdatabr.org") {
+          target = "https://www.dayofdatabr.org" + window.location.pathname + window.location.search + window.location.hash;
+        } else if (host === "register.dayofdatabr.org") {
+          target = "https://dayofdatabr26.eventbrite.com/";
+        } else if (host === "callforspeakers.dayofdatabr.org") {
+          target = "https://sessionize.com/api/v2/ocxfgd65/view/Speakers?under=True";
+        }
+
+        if (target) {
+          window.location.replace(target);
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="{{ "site.css" | relURL }}">
   </head>
   <body>
