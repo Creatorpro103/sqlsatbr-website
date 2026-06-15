@@ -4,6 +4,15 @@ const ALLOWED_ORIGINS = new Set([
   "http://localhost:1313",
 ]);
 
+const PACKAGE_PRICING = {
+  Blog: "50.00",
+  Bronze: "250.00",
+  Silver: "600.00",
+  Gold: "1500.00",
+  "Unattended Booth": "1750.00",
+  Platinum: "2500.00",
+};
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -15,16 +24,21 @@ export default {
       });
     }
 
-    if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/health")) {
+    if (request.method === "GET" && url.pathname === "/") {
       return json(
         {
           ok: true,
           service: "sponsor-intake-worker",
           route: "/api/invoice-request",
+          provider: "paypal",
         },
         200,
         request,
       );
+    }
+
+    if (request.method === "GET" && url.pathname === "/health") {
+      return handleHealthCheck(request, env);
     }
 
     if (request.method === "POST" && url.pathname === "/api/invoice-request") {
@@ -41,6 +55,49 @@ export default {
     );
   },
 };
+
+async function handleHealthCheck(request, env) {
+  const config = validatePayPalConfig(env);
+
+  if (!config.ok) {
+    return json(
+      {
+        ok: false,
+        provider: "paypal",
+        configured: false,
+        message: config.message,
+      },
+      500,
+      request,
+    );
+  }
+
+  try {
+    await getPayPalAccessToken(env);
+
+    return json(
+      {
+        ok: true,
+        provider: "paypal",
+        configured: true,
+        route: "/api/invoice-request",
+      },
+      200,
+      request,
+    );
+  } catch (error) {
+    return json(
+      {
+        ok: false,
+        provider: "paypal",
+        configured: false,
+        message: error.message,
+      },
+      502,
+      request,
+    );
+  }
+}
 
 async function handleInvoiceRequest(request, env) {
   let payload;
@@ -73,58 +130,183 @@ async function handleInvoiceRequest(request, env) {
     );
   }
 
-  if (!env.SPONSOR_INTAKE_WEBHOOK_URL) {
+  const config = validatePayPalConfig(env);
+  if (!config.ok) {
     return respondForRequest(
       request,
       {
         ok: false,
-        message: "The invoice request service is not fully configured yet.",
+        message: config.message,
       },
       500,
     );
   }
 
-  const forwardPayload = {
-    event: "invoice-request.created",
-    submittedAt: new Date().toISOString(),
-    source: "dayofdatabr.org",
-    submission,
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    "User-Agent": "sqlsatbr-worker",
-  };
-
-  if (env.SPONSOR_INTAKE_SHARED_SECRET) {
-    headers["X-Sponsor-Intake-Secret"] = env.SPONSOR_INTAKE_SHARED_SECRET;
-  }
-
-  const webhookResponse = await fetch(env.SPONSOR_INTAKE_WEBHOOK_URL, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(forwardPayload),
-  });
-
-  if (!webhookResponse.ok) {
+  const packageAmount = PACKAGE_PRICING[submission.sponsorPackage];
+  if (!packageAmount) {
     return respondForRequest(
       request,
       {
         ok: false,
-        message: "The invoice request could not be recorded right now.",
+        message:
+          "Automated PayPal invoices currently support the published sponsor packages only. Please contact the organizers for custom invoice requests.",
+      },
+      400,
+    );
+  }
+
+  try {
+    const accessToken = await getPayPalAccessToken(env);
+    const invoice = await createPayPalInvoice(submission, packageAmount, accessToken, env);
+    await sendPayPalInvoice(invoice.id, accessToken, env);
+
+    return respondForRequest(
+      request,
+      {
+        ok: true,
+        invoiceId: invoice.id,
+        message:
+          "Thanks. Your PayPal invoice was created and sent, and an organizer will follow up if anything else is needed.",
+      },
+      200,
+    );
+  } catch (error) {
+    return respondForRequest(
+      request,
+      {
+        ok: false,
+        message: error.message || "The PayPal invoice could not be created right now.",
       },
       502,
     );
   }
+}
 
-  return respondForRequest(
-    request,
-    {
-      ok: true,
-      message: "Thanks. Your invoice request was received and an organizer will follow up.",
+async function getPayPalAccessToken(env) {
+  const auth = btoa(`${env.PAYPAL_CLIENT_ID}:${env.PAYPAL_CLIENT_SECRET}`);
+  const response = await fetch(`${payPalBaseUrl(env)}/v1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
     },
-    200,
+    body: "grant_type=client_credentials",
+  });
+
+  const body = await response.json();
+  if (!response.ok || !body.access_token) {
+    throw new Error("PayPal authentication failed. Check the Worker PayPal secrets.");
+  }
+
+  return body.access_token;
+}
+
+async function createPayPalInvoice(submission, packageAmount, accessToken, env) {
+  const contactName = splitName(submission.primaryContactName);
+  const invoiceDate = new Date().toISOString().slice(0, 10);
+
+  const payload = {
+    detail: {
+      currency_code: "USD",
+      invoice_date: invoiceDate,
+      reference: buildReference(submission),
+      note: buildInvoiceNote(submission),
+      term: "Due on receipt",
+      memo: `Day of Data Baton Rouge 2026 ${submission.sponsorPackage} sponsor invoice`,
+    },
+    primary_recipients: [
+      {
+        billing_info: {
+          name: {
+            given_name: contactName.givenName,
+            surname: contactName.surname,
+          },
+          email_address: submission.billingContactEmail,
+        },
+      },
+    ],
+    items: [
+      {
+        name: `Day of Data Baton Rouge 2026 ${submission.sponsorPackage} Sponsorship`,
+        description: buildInvoiceLineDescription(submission),
+        quantity: "1",
+        unit_amount: {
+          currency_code: "USD",
+          value: packageAmount,
+        },
+      },
+    ],
+  };
+
+  if (env.PAYPAL_INVOICER_EMAIL) {
+    payload.invoicer = {
+      email_address: env.PAYPAL_INVOICER_EMAIL,
+    };
+  }
+
+  const response = await fetch(`${payPalBaseUrl(env)}/v2/invoicing/invoices`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const body = await response.json();
+  if (!response.ok || !body.id) {
+    throw new Error("PayPal could not create the invoice.");
+  }
+
+  return body;
+}
+
+async function sendPayPalInvoice(invoiceId, accessToken, env) {
+  const response = await fetch(
+    `${payPalBaseUrl(env)}/v2/invoicing/invoices/${invoiceId}/send`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({}),
+    },
   );
+
+  if (response.status === 202 || response.status === 200) {
+    return;
+  }
+
+  throw new Error("PayPal created the invoice, but it could not be sent.");
+}
+
+function validatePayPalConfig(env) {
+  if (!env.PAYPAL_CLIENT_ID || !env.PAYPAL_CLIENT_SECRET) {
+    return {
+      ok: false,
+      message: "The PayPal invoice service is not fully configured yet.",
+    };
+  }
+
+  const configuredEnv = normalizeText(env.PAYPAL_ENV).toLowerCase();
+  if (configuredEnv !== "sandbox" && configuredEnv !== "live") {
+    return {
+      ok: false,
+      message: "PAYPAL_ENV must be set to sandbox or live.",
+    };
+  }
+
+  return { ok: true };
+}
+
+function payPalBaseUrl(env) {
+  return normalizeText(env.PAYPAL_ENV).toLowerCase() === "live"
+    ? "https://api-m.paypal.com"
+    : "https://api-m.sandbox.paypal.com";
 }
 
 async function parsePayload(request) {
@@ -172,6 +354,54 @@ function validateSubmission(submission) {
   if (submission.companyWebsite) errors.push("companyWebsite");
 
   return errors;
+}
+
+function splitName(fullName) {
+  const parts = normalizeText(fullName).split(/\s+/).filter(Boolean);
+  if (parts.length === 0) {
+    return { givenName: "Sponsor", surname: "Contact" };
+  }
+
+  if (parts.length === 1) {
+    return { givenName: parts[0], surname: "Contact" };
+  }
+
+  return {
+    givenName: parts[0],
+    surname: parts.slice(1).join(" "),
+  };
+}
+
+function buildReference(submission) {
+  const stamp = new Date().toISOString().replaceAll(/[-:TZ.]/g, "").slice(0, 12);
+  return `DODBR-${submission.sponsorPackage.toUpperCase().replaceAll(/\s+/g, "-")}-${stamp}`;
+}
+
+function buildInvoiceLineDescription(submission) {
+  return [
+    `Organization: ${submission.organizationName}`,
+    `Primary contact: ${submission.primaryContactName}`,
+    `Contact email: ${submission.contactEmail}`,
+    `Contact phone: ${submission.contactPhone}`,
+    `Preferred payment method: ${submission.preferredPaymentMethod}`,
+  ].join(" | ");
+}
+
+function buildInvoiceNote(submission) {
+  const lines = [
+    `Sponsor organization: ${submission.organizationName}`,
+    `Primary contact: ${submission.primaryContactName}`,
+    `Contact email: ${submission.contactEmail}`,
+    `Contact phone: ${submission.contactPhone}`,
+    `Billing email: ${submission.billingContactEmail}`,
+    `Preferred payment method: ${submission.preferredPaymentMethod}`,
+  ];
+
+  if (submission.notes) {
+    lines.push(`Notes: ${submission.notes}`);
+  }
+
+  return lines.join("\n");
 }
 
 function normalizeText(value) {

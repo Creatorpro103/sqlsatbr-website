@@ -49,17 +49,19 @@ This repository now also contains the **Cloudflare Worker companion** for sponso
 
 - `POST /api/invoice-request`
 
-The Worker validates the invoice request payload and forwards the private submission to the configured webhook destination outside the public repository.
+The Worker validates the invoice request payload, creates a PayPal invoice for the selected sponsor package, and then sends it through PayPal.
 
 ### Required Worker configuration
 
 Set this Worker secret in Cloudflare:
 
-- `SPONSOR_INTAKE_WEBHOOK_URL` - private webhook destination that will receive validated sponsor intake submissions
+- `PAYPAL_CLIENT_ID` - PayPal REST app client ID
+- `PAYPAL_CLIENT_SECRET` - PayPal REST app secret
+- `PAYPAL_ENV` - `sandbox` or `live`
 
 Optional secret:
 
-- `SPONSOR_INTAKE_SHARED_SECRET` - shared secret sent as the `X-Sponsor-Intake-Secret` header when forwarding submissions
+- `PAYPAL_INVOICER_EMAIL` - specific PayPal invoicer email to set on generated invoices when your account needs it
 
 ## Custom domain cutover
 
