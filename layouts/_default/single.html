@@ -1,13 +1,16 @@
 {{ define "main" }}
-  <article class="card stack">
-    <header class="stack stack-tight">
-      <p class="eyebrow">Day of Data Baton Rouge</p>
+  <header class="page-header">
+    <div class="page-header-inner">
       <h2>{{ .Title }}</h2>
-      {{ with .Description }}<p class="lede">{{ . }}</p>{{ end }}
-      {{ with .Params.dateLabel }}<p class="eyebrow">{{ . }}</p>{{ end }}
-    </header>
-    <div class="stack prose">
-      {{ .Content }}
+      {{ with .Description }}<p class="page-header-lede">{{ . }}</p>{{ end }}
+      {{ with .Params.dateLabel }}<p class="eyebrow eyebrow-light">{{ . }}</p>{{ end }}
     </div>
-  </article>
+  </header>
+  <section class="section">
+    <div class="section-inner{{ if not .Params.wide }} narrow{{ end }}">
+      <div class="stack prose">
+        {{ .Content }}
+      </div>
+    </div>
+  </section>
 {{ end }}

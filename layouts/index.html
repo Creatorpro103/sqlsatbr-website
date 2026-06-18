@@ -1,39 +1,71 @@
 {{ define "main" }}
   {{ $currentEventYear := site.GetPage (printf "/event-years/%s" .Params.currentEventYear) }}
-  <section class="hero card stack">
-    <p class="eyebrow">Current Event Year</p>
-    <h2>Day of Data Baton Rouge {{ .Params.currentEventYear }}</h2>
-    <div class="prose">{{ .Content }}</div>
-    {{ with $currentEventYear }}
+  <section class="hero">
+    <div class="hero-inner stack">
+      <img class="hero-logo" src="{{ "DodBR2026.png" | relURL }}" alt="Day of Data Baton Rouge logo" width="120" height="120">
+      {{ with $currentEventYear }}<p class="hero-date">{{ .Params.dateRange }}</p>{{ end }}
+      <h2 class="hero-title">Day of Data Baton Rouge {{ .Params.currentEventYear }}</h2>
+      <p class="hero-tagline">{{ site.Params.tagline }}</p>
+      {{ with $currentEventYear }}
+        <div class="button-row hero-actions">
+          <a class="button button-hero" href="{{ .Params.registrationUrl }}">RSVP / Register</a>
+          {{ with site.GetPage "/schedule" }}<a class="button button-hero-ghost" href="{{ .RelPermalink }}">View Schedule</a>{{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </section>
+
+  <section class="section section-light">
+    <div class="section-inner stack">
+      <h2 class="section-heading">About the event</h2>
+      <div class="prose lede-prose">{{ .Content }}</div>
+    </div>
+  </section>
+
+  {{ with $currentEventYear }}
+  <section class="section">
+    <div class="section-inner stack">
+      <h2 class="section-heading">When &amp; where</h2>
+      <div class="venue-grid">
+        <div class="venue-card stack stack-tight">
+          <p class="venue-day">Friday &middot; PreCons</p>
+          <h3>{{ .Params.preconsVenueName }}</h3>
+          <p>{{ .Params.preconsVenueAddress }}</p>
+        </div>
+        <div class="venue-card stack stack-tight">
+          <p class="venue-day">Saturday &middot; Main Event</p>
+          <h3>{{ .Params.eventVenueName }}</h3>
+          <p>{{ .Params.eventVenueAddress }}</p>
+        </div>
+      </div>
       <dl class="facts-grid">
         <div>
           <dt>Date</dt>
           <dd>{{ .Params.dateRange }}</dd>
         </div>
         <div>
-          <dt>Friday PreCons venue</dt>
-          <dd>{{ .Params.preconsVenueName }}<br>{{ .Params.preconsVenueAddress }}</dd>
+          <dt>Cost</dt>
+          <dd>Free to attend</dd>
         </div>
         <div>
-          <dt>Saturday event venue</dt>
-          <dd>{{ .Params.eventVenueName }}<br>{{ .Params.eventVenueAddress }}</dd>
+          <dt>Hosted by</dt>
+          <dd>Baton Rouge User Groups</dd>
         </div>
       </dl>
+    </div>
+  </section>
+
+  <section class="section section-light">
+    <div class="section-inner stack">
+      <h2 class="section-heading">What to expect</h2>
+      <div class="prose">{{ .Content }}</div>
       <div class="button-row">
         <a class="button" href="{{ .Params.registrationUrl }}">Register</a>
-        {{ with site.GetPage "/schedule" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Schedule</a>{{ end }}
-        {{ with site.GetPage "/precons" }}<a class="button button-secondary" href="{{ .RelPermalink }}">PreCons</a>{{ end }}
         {{ with site.GetPage "/speakers" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Speakers</a>{{ end }}
         {{ with site.GetPage "/sponsors" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Sponsors</a>{{ end }}
-        {{ with site.GetPage "/become-a-volunteer" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Become a Volunteer</a>{{ end }}
-        {{ with site.GetPage "/become-a-sponsor" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Become a Sponsor</a>{{ end }}
-        {{ with site.GetPage "/invoice-request" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Invoice Request</a>{{ end }}
-        {{ with site.GetPage "/archive" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Archive</a>{{ end }}
+        {{ with site.GetPage "/become-a-volunteer" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Volunteer</a>{{ end }}
       </div>
-      <div class="card card-subtle stack">
-        <h3>What to expect</h3>
-        <div class="prose">{{ .Content }}</div>
-      </div>
-    {{ end }}
+    </div>
   </section>
+  {{ end }}
 {{ end }}

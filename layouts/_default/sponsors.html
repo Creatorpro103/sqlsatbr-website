@@ -1,11 +1,13 @@
 {{ define "main" }}
-  {{ $eventYearSponsors := index site.Data.sponsors "2026" }}
-  <article class="card stack">
-    <header class="stack stack-tight">
-      <p class="eyebrow">Day of Data Baton Rouge</p>
+  {{ $eventYearSponsors := index hugo.Data.sponsors "2026" }}
+  <header class="page-header">
+    <div class="page-header-inner">
       <h2>{{ .Title }}</h2>
-      {{ with .Description }}<p class="lede">{{ . }}</p>{{ end }}
-    </header>
+      {{ with .Description }}<p class="page-header-lede">{{ . }}</p>{{ end }}
+    </div>
+  </header>
+  <section class="section">
+    <div class="section-inner stack">
     <div class="stack prose">
       {{ .Content }}
     </div>
@@ -48,5 +50,13 @@
         {{ end }}
       </div>
     {{ end }}
-  </article>
+    {{ with site.GetPage "/become-a-sponsor" }}
+      <div class="card card-subtle stack stack-tight sponsor-cta">
+        <h3>Interested in sponsoring?</h3>
+        <p>Are you or your company interested in supporting Day of Data Baton Rouge?</p>
+        <div class="button-row"><a class="button" href="{{ .RelPermalink }}">Become a Sponsor</a></div>
+      </div>
+    {{ end }}
+    </div>
+  </section>
 {{ end }}
