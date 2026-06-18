@@ -1,11 +1,12 @@
 {{ define "main" }}
-  <section class="card stack">
-    <header class="stack stack-tight">
-      <p class="eyebrow">Day of Data Baton Rouge</p>
+  <header class="page-header">
+    <div class="page-header-inner">
       <h2>{{ .Title }}</h2>
-      {{ with .Description }}<p class="lede">{{ . }}</p>{{ end }}
-    </header>
-    <div class="stack">
+      {{ with .Description }}<p class="page-header-lede">{{ . }}</p>{{ end }}
+    </div>
+  </header>
+  <section class="section">
+    <div class="section-inner stack">
       {{ if .Content }}<div class="prose">{{ .Content }}</div>{{ end }}
       <div class="archive-grid">
         {{ range .Pages.ByTitle.Reverse }}

@@ -49,15 +49,9 @@
         </nav>
       </div>
     </header>
-    <div class="page-shell{{ with .Layout }} page-shell-{{ . }}{{ end }}">
-      <header class="site-header">
-        <h1>{{ site.Title }}</h1>
-        <p class="tagline">{{ site.Params.tagline }}</p>
-      </header>
-      <main>
-        {{ block "main" . }}{{ end }}
-      </main>
-    </div>
+    <main>
+      {{ block "main" . }}{{ end }}
+    </main>
     <footer class="site-footer">
       <div class="footer-inner">
         <p>Day of Data Baton Rouge &mdash; hosted by the Baton Rouge User Groups.</p>
