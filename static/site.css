@@ -287,6 +287,52 @@ body {
   overflow-x: auto;
 }
 
+/* Theme the Sessionize GridSmart widget to match the site.
+   Sessionize injects its own stylesheet after ours, so these
+   overrides use !important to win on equal specificity. */
+.schedule-embed .sz-session__card {
+  background: var(--brand-navy) !important;
+  color: #ffffff !important;
+  border-radius: 0.5rem !important;
+}
+
+.schedule-embed .sz-session__title,
+.schedule-embed .sz-session__title a {
+  color: #ffffff !important;
+}
+
+.schedule-embed .sz-session__speakers,
+.schedule-embed .sz-session__speakers a,
+.schedule-embed .sz-session__time,
+.schedule-embed .sz-session__room {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.schedule-embed .sz-session--service .sz-session__card,
+.schedule-embed .sz-session--plenum .sz-session__card {
+  background: var(--brand-navy-dark) !important;
+}
+
+.schedule-embed .sz-tabs__item--active .sz-tabs__link {
+  background: var(--brand-navy) !important;
+  color: #ffffff !important;
+  border-color: var(--brand-navy) !important;
+}
+
+.schedule-embed .sz-tabs__link {
+  color: var(--brand-navy) !important;
+}
+
+.schedule-embed .sz-tabs__link:hover {
+  background: rgba(1, 49, 105, 0.08) !important;
+}
+
+.schedule-embed .sz-room,
+.schedule-embed .sz-cssgrid__track-label {
+  color: var(--brand-navy) !important;
+  font-weight: 700 !important;
+}
+
 /* PreCon speaker + session cards */
 .precon-speaker {
   display: flex;
