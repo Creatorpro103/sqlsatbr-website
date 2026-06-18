@@ -281,6 +281,67 @@ body {
   font-size: 1.1rem;
 }
 
+/* PreCon speaker + session cards */
+.precon-speaker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.precon-photo {
+  flex: 0 0 auto;
+  width: 11rem;
+  height: 11rem;
+  border-radius: 0.75rem;
+  object-fit: cover;
+  border: 4px solid #ffffff;
+  box-shadow: 0 12px 32px rgba(18, 32, 51, 0.12);
+}
+
+.precon-speaker-meta {
+  flex: 1 1 18rem;
+}
+
+.precon-name {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.precon-credential {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-navy);
+}
+
+.precon-session {
+  margin-top: 2rem;
+}
+
+.precon-detail-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.precon-detail {
+  padding: 1.25rem;
+  border: 1px solid var(--brand-border);
+  border-top: 4px solid var(--brand-navy);
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+
+.precon-detail h4 {
+  margin: 0;
+  font-family: "Arvo", Georgia, serif;
+  font-size: 1.05rem;
+  color: var(--brand-navy);
+}
+
 .eyebrow {
   margin: 0 0 0.5rem;
   font-size: 0.85rem;
