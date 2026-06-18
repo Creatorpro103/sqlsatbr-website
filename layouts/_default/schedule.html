@@ -1,0 +1,25 @@
+{{ define "main" }}
+  <header class="page-header">
+    <div class="page-header-inner">
+      <h2>{{ .Title }}</h2>
+      {{ with .Params.intro }}<p class="page-header-lede">{{ . }}</p>{{ end }}
+    </div>
+  </header>
+  <section class="section">
+    <div class="section-inner stack">
+      {{ with .Params.registrationUrl }}
+        <div class="button-row"><a class="button" href="{{ . }}">Register to attend</a></div>
+      {{ end }}
+      {{ with .Params.sessionizeId }}
+        <div class="schedule-embed">
+          <div id="sessionize-schedule"></div>
+          <script type="text/javascript" src="https://sessionize.com/api/v2/{{ . }}/view/GridSmart"></script>
+          <noscript>
+            <p>The session grid requires JavaScript. View the full schedule on
+              <a href="https://sessionize.com/api/v2/{{ . }}/view/GridSmart">Sessionize</a>.</p>
+          </noscript>
+        </div>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}

@@ -281,6 +281,12 @@ body {
   font-size: 1.1rem;
 }
 
+/* Sessionize schedule embed */
+.schedule-embed {
+  margin-top: 0.5rem;
+  overflow-x: auto;
+}
+
 /* PreCon speaker + session cards */
 .precon-speaker {
   display: flex;
