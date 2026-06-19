@@ -1,11 +1,13 @@
 {{ define "main" }}
-  {{ $eventYearSponsors := index hugo.Data.sponsors "2026" }}
+  {{ $event := .Parent }}
+  {{ $eventYearSponsors := index hugo.Data.sponsors $event.Params.sponsorsKey }}
   <header class="page-header">
     <div class="page-header-inner">
       <h2>{{ .Title }}</h2>
       {{ with .Description }}<p class="page-header-lede">{{ . }}</p>{{ end }}
     </div>
   </header>
+  {{ partial "event-subnav.html" $event }}
   <section class="section">
     <div class="section-inner stack">
     <div class="stack prose">

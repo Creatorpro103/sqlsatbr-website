@@ -27,4 +27,4 @@ Please contact us at [sqlpassbr@gmail.com](mailto:sqlpassbr@gmail.com) with any 
 - [Submit sponsor interest for the 2026 Event Year](https://docs.google.com/forms/d/e/1FAIpQLSeYTQBlIC2UByJCf1vqn6JabDY0nz3ToNRKf6TCQ6YbxPIFsQ/viewform)
 - [Request an invoice for the 2026 Event Year]({{< relref "invoice-request.md" >}})
 
-You can also review the current [Sponsor Listings]({{< relref "sponsors.md" >}}) to see who is already supporting the 2026 Event Year.
+You can also review the current [Sponsor Listings]({{< relref "/events/dodbr-2026/sponsors.md" >}}) to see who is already supporting the 2026 Event Year.

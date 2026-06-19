@@ -1,0 +1,13 @@
+{{/* Context: an event section page. Renders links to its sub-pages plus CTAs. */}}
+<nav class="event-subnav" aria-label="Event sections">
+  <div class="event-subnav-inner">
+    <a class="event-subnav-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+    <div class="event-subnav-links">
+      {{ range .Pages }}
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{ end }}
+      {{ with .Params.volunteerUrl }}<a href="{{ . }}">Volunteer</a>{{ end }}
+      {{ with .Params.registrationUrl }}<a class="event-subnav-register" href="{{ . }}">Register</a>{{ end }}
+    </div>
+  </div>
+</nav>

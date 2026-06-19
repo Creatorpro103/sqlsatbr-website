@@ -1,183 +1,166 @@
 # Site maintenance runbook
 
-Practical, step-by-step guides for the two most common jobs:
+Practical, step-by-step guides for the common jobs:
 
-1. [Add a new sponsor for the current event year](#1-add-a-new-sponsor-current-year)
-2. [Start a new event year](#2-start-a-new-event-year)
+1. [Add a sponsor to an event](#1-add-a-sponsor-to-an-event)
+2. [Add a new event](#2-add-a-new-event)
+3. [How the event model works](#3-how-the-event-model-works)
 
-Both publish through the **Publication PR flow**: make changes on a branch, open a
-pull request, and the site deploys to GitHub Pages automatically after the PR is
+Everything publishes through the **Publication PR flow**: make changes on a branch,
+open a pull request, and the site deploys to GitHub Pages automatically after the PR is
 merged to `main`. To preview locally first, install [Hugo](https://gohugo.io/installation/)
-and run `hugo server`, then open <http://localhost:1313/>.
+and run `hugo server`.
 
 > **Current hosting note:** the site is temporarily published to
 > <https://kennyneal.github.io/sqlsatbr-website/> for preview. `static/CNAME` has been
-> removed and `baseURL` in `hugo.yaml` points at the github.io path. When you cut over
-> to the live domain, restore `static/CNAME` (`www.dayofdatabr.org`) and set
-> `baseURL: https://www.dayofdatabr.org/`.
+> removed and `baseURL` in `hugo.yaml` points at the github.io path. When you cut over to
+> the live domain, restore `static/CNAME` (`www.dayofdatabr.org`) and set
+> `baseURL: https://www.dayofdatabr.org/`. Because the dev server honors that base path,
+> local preview URLs are under `http://localhost:1313/sqlsatbr-website/`.
 
 ---
 
-## 1. Add a new sponsor (current year)
+## 1. Add a sponsor to an event
 
-Sponsors are data-driven. You add an image and one block of YAML — no HTML required.
+Each event has its **own** sponsor list, identified by the event's `sponsorsKey`
+(e.g. `dodbr-2026`). Sponsors are data-driven — add an image and one block of YAML.
 
 ### Step 1 — Add the logo image
 
-Drop the sponsor's logo into `static/sponsors/2026/`. For example:
+Drop the logo into `static/sponsors/<sponsorsKey>/`, e.g.:
 
 ```
-static/sponsors/2026/acme.png
+static/sponsors/dodbr-2026/acme.png
 ```
 
-Guidance:
-- **Format:** PNG or SVG with a transparent background looks best; JPG is fine for
-  photos/solid logos.
-- **Size:** the card frames and scales the image automatically, so an exact size is not
-  required. A reasonably high-resolution, roughly horizontal logo works well.
-- **File name:** lowercase, no spaces (use hyphens).
+Guidance: PNG or SVG with a transparent background looks best; size doesn't need to be
+exact (the card scales it); use a lowercase, hyphenated file name.
 
 ### Step 2 — Add the sponsor to the data file
 
-Edit `data/sponsors/2026.yaml`. Find the group for the sponsor's tier and add an entry
-under its `sponsors:` list:
+Edit `data/sponsors/<sponsorsKey>.yaml` (e.g. `data/sponsors/dodbr-2026.yaml`). Find the
+group for the sponsor's tier and add an entry under its `sponsors:` list:
 
 ```yaml
       - name: Acme Corporation
         url: https://www.acme.com/
-        logo: sponsors/2026/acme.png
+        logo: sponsors/dodbr-2026/acme.png
 ```
-
-Field reference:
 
 | Field     | Required | Notes |
 | --------- | -------- | ----- |
 | `name`    | yes      | Shown under the logo and used as the image `alt` text. |
-| `url`     | no       | If present, the whole card links here. Omit for a non-clickable card. |
-| `logo`    | no       | Path **relative to `static/`** (note: no leading slash). Omit to show a text-only card. |
-| `logoFit` | no       | `standard` (default), `wide`, or `extra-wide` — use `wide`/`extra-wide` for very wide logos that otherwise look small. |
+| `url`     | no       | If present, the whole card links here. |
+| `logo`    | no       | Path **relative to `static/`** (no leading slash). |
+| `logoFit` | no       | `standard` (default), `wide`, or `extra-wide` for very wide logos. |
 
-The available tier groups (with their `tier:` value) are:
+Tiers (the `tier:` value on each group): `global`, `platinum`, `facility`, `gold`,
+`silver`. **Stick to these** — each has matching sizing in `static/site.css`. A new tier
+renders but falls back to a plain layout until its styles are added.
 
-| Group title         | `tier`     |
-| ------------------- | ---------- |
-| Global Sponsor      | `global`   |
-| Platinum Sponsors   | `platinum` |
-| Facility Sponsor    | `facility` |
-| Gold Sponsors       | `gold`     |
-| Silver Sponsors     | `silver`   |
+### Step 3 — Preview and publish
 
-> **Stick to the existing tiers.** Logo sizing and grid columns are styled per tier in
-> `static/site.css` (`.sponsor-grid-<tier>`, `.sponsor-card-<tier>`, etc.). A brand-new
-> tier name will render but fall back to a plain single-column layout until matching CSS
-> is added. If you genuinely need a new tier, add a new group block in the YAML **and**
-> the corresponding styles in `site.css`.
-
-### Step 3 — Preview, then publish
-
-1. Run `hugo server` and confirm the sponsor appears on the **Sponsors** page in the
-   right tier with the logo sized correctly.
-2. Commit on a branch, open a Publication PR, and merge. The site redeploys
-   automatically.
-
-That's it — adding a sponsor is just steps 1–2 plus a PR.
+Run `hugo server`, confirm the sponsor appears on that event's Sponsors page
+(`/events/<slug>/sponsors/`), then open a Publication PR and merge.
 
 ---
 
-## 2. Start a new event year
+## 2. Add a new event
 
-When planning the next event (the steps below use **2027** as the example — substitute
-the real year), several files still hard-code the current year. Work through this
-checklist. Items are roughly ordered so the site keeps building at each step.
+The site is **multi-event**. Adding an event is a self-contained folder plus its own
+sponsor data — there is no site-wide "annual rollover," and no layout edits are needed.
+The home page automatically features the soonest upcoming event and lists the rest;
+past events drop off once their date passes.
 
-### A. Sponsors data and logos
+In the steps below, pick a **slug** for the event (e.g. `spring-2027`, `fall-2027`).
 
-1. Copy `data/sponsors/2026.yaml` to `data/sponsors/2027.yaml`. Trim it down to the
-   sponsors confirmed so far (or leave a starter set and add more as they sign, using
-   the process in section 1).
-2. Create the logo folder `static/sponsors/2027/` and place new logos there. Update the
-   `logo:` paths in the new YAML to point at `sponsors/2027/...`.
-3. **Point the Sponsors page at the new year.** In `layouts/_default/sponsors.html`,
-   update the hard-coded year on the first line of the template:
+### Step 1 — Create the event folder
 
-   ```go-html-template
-   {{ $eventYearSponsors := index hugo.Data.sponsors "2027" }}
-   ```
+Create `content/events/<slug>/_index.md`. Copy `content/events/dodbr-2026/_index.md` as a
+starting point and edit the front matter:
 
-### B. Event details and the home page
+```yaml
+---
+title: Day of Data Baton Rouge — Spring 2027
+description: ...
+layout: event
+startDate: 2027-04-17          # drives "upcoming" sorting and the featured slot
+dateRange: April 17, 2027      # display text
+registrationUrl: https://…     # this event's Eventbrite (omit ⇒ no Register button)
+sessionizeId: abcd1234         # this event's Sessionize id (omit ⇒ no Schedule/Speakers)
+sponsorsKey: spring-2027       # data/sponsors/spring-2027.yaml (omit ⇒ no Sponsors page)
+volunteerUrl: https://…        # SignupGenius (omit ⇒ no Volunteer link)
+preconsVenueName / preconsVenueAddress
+eventVenueName / eventVenueAddress
+preconsIntro: ...              # only if it has PreCons
+precons: [...]                 # only if it has PreCons (see dodbr-2026 for the shape)
+---
 
-4. Copy `content/event-years/2026.md` to `content/event-years/2027.md` and update
-   `eventYear`, `dateRange`, the venue names/addresses, and `registrationUrl`.
-5. In `content/_index.md`, set `currentEventYear: "2027"` and refresh any year text in
-   the intro copy.
+Body copy describing the event (shown in the "About the event" section).
+```
 
-### C. Sessionize (Schedule + Speakers)
+> The body and "When & where" venue cards/facts render from this one file. Anything you
+> omit simply doesn't appear — that's how a **lighter** event (e.g. spring with no
+> PreCons) works.
 
-6. Create the new event in Sessionize — it issues a **new API id** (the current one is
-   `ocxfgd65`). Update `sessionizeId:` in both `content/schedule.md` and
-   `content/speakers.md`.
-7. If the `callforspeakers.dayofdatabr.org` redirect is in use, update the Sessionize id
-   in `layouts/_default/baseof.html` (the host-redirect script) and in `README.md`.
+### Step 2 — Add the feature sub-pages it actually has
 
-### D. Registration (Eventbrite)
+Each per-event page is a thin file under the event folder whose layout reads the event's
+data from its parent. **Only create the ones the event has** — that's what keeps a
+lighter event lighter. Copy from `content/events/dodbr-2026/`:
 
-8. The registration link (`https://dayofdatabr26.eventbrite.com/`) appears in several
-   places. Update each to the new event's Eventbrite URL:
-   - `content/event-years/2027.md` (`registrationUrl`)
-   - `content/schedule.md` (`registrationUrl`)
-   - the `register.dayofdatabr.org` redirect in `layouts/_default/baseof.html`
-   - `README.md`
+| File | Page | Needs |
+| ---- | ---- | ----- |
+| `schedule.md` | Schedule (Sessionize grid) | `sessionizeId` on the event |
+| `speakers.md` | Speakers (Sessionize wall) | `sessionizeId` on the event |
+| `precons.md`  | PreCons workshops | `precons` on the event |
+| `sponsors.md` | Sponsor listings | `sponsorsKey` + data file |
 
-### E. PreCons
+(You can also add `aliases:` in a sub-page if you want a short URL to redirect to it.)
 
-9. Update `content/precons.md` with the new year's workshops: titles, descriptions,
-   detail lists, instructor bios, and Eventbrite ticket links. Add new instructor
-   headshots to `static/precons/` (sourced from each speaker's Sessionize profile) and
-   update the `photo:` paths. Remove the prior year's workshops/photos.
+### Step 3 — Add sponsor data and logos
 
-### F. Become a Sponsor / Volunteer / page copy
+If the event has sponsors, create `data/sponsors/<slug>.yaml` and
+`static/sponsors/<slug>/` (see section 1 for the format).
 
-10. In `content/become-a-sponsor.md`, refresh the year text and confirm the sponsor
-    interest **Google Form** link is current. The benefit matrix usually carries over —
-    update prices/benefits only if the packages change.
-11. In `content/become-a-volunteer.md`, update the **SignupGenius** `signupUrl` for the
-    new year.
-12. Sweep the remaining pages for year text: `content/sponsors.md`,
-    `content/invoice-request.md`.
+### Step 4 — PreCons headshots
 
-### G. Invoice worker
+If the event has PreCons, add instructor headshots to `static/precons/` and point each
+workshop's `photo:` at them. (For the current event they were sourced from each
+speaker's Sessionize profile.)
 
-13. In `worker/src/index.js`, update the invoice memo/name strings that read
-    `Day of Data Baton Rouge 2026` (around lines 223 and 238) to the new year. Redeploy
-    the Cloudflare Worker if invoice intake is in use.
+### Step 5 — Preview and publish
 
-### H. Logo / favicon
+`hugo server`, click through the home page (it should feature or list the new event) and
+the event's pages, then open a Publication PR and merge.
 
-14. The header logo and favicon reference `static/DodBR2026.png` from
-    `layouts/_default/baseof.html`. If there is a new-year logo, either replace that file
-    (keep the name) or add the new image and update the two references in `baseof.html`.
-    *Tip: renaming it to a year-agnostic file (e.g. `logo.png`) once will remove this
-    step in future years.*
+### Things that are still per-occurrence (rare)
 
-### I. Archive the finished event
+- **Invoice worker:** `worker/src/index.js` builds invoice memo/name strings that include
+  the event year (around lines 223 and 238). Update if you use invoice intake for the new
+  event, and redeploy the Cloudflare Worker.
+- **Logo / favicon:** the header logo and favicon use `static/DodBR2026.png`
+  (referenced in `layouts/_default/baseof.html`). Only touch this if the brand logo
+  changes.
+- **Archive:** after an event is over you can add an entry under `content/archive/` for
+  the **Past Events** page. The event folder and its sponsor data can stay in place as
+  history.
 
-15. After the 2026 event is over, add an entry under `content/archive/` (copy the format
-    of an existing file such as `content/archive/2024.md`) so it shows on the
-    **Past Events** page. Leave `data/sponsors/2026.yaml` and `static/sponsors/2026/` in
-    place for the historical record.
+---
 
-### J. Docs
+## 3. How the event model works
 
-16. Update year references in `docs/content-baseline.md` and `docs/sponsor-packages.md`,
-    and this runbook's examples if anything changed.
-
-### Finally
-
-17. Run `hugo server`, click through every page, then publish via a Publication PR.
-
-> **Reducing future toil (optional):** the year is currently hard-coded in a few spots —
-> most notably `layouts/_default/sponsors.html`, the `DodBR2026.png` logo filename, and
-> the Eventbrite/Sessionize ids scattered across content. A future improvement is to
-> promote these to site `params` in `hugo.yaml` (e.g. `eventYear`, `registrationUrl`,
-> `sessionizeId`) and have the layouts/content read them, so a rollover becomes a handful
-> of one-line edits. Not required, but it would shrink section 2 considerably.
+- **An event is a content section** at `content/events/<slug>/` with `_index.md`
+  (`layout: event`). Its front matter holds all event-specific values.
+- **Feature-by-presence:** sub-pages and sections appear only when their data exists, so
+  events can be full or lightweight without template changes.
+- **Home & Events listing** (`layouts/index.html`, `layouts/events/list.html`) read the
+  event sections, split them into upcoming/past by comparing `startDate` to today, and
+  sort by date. *Note for editors of those templates:* `startDate` is read as an ISO
+  string and compared against `now.Format "2006-01-02"`, and Hugo lowercases param keys —
+  so the queries use `"Params.startdate"` (all lowercase).
+- **Per-event pages** (`layouts/_default/schedule.html`, `speakers.html`, `precons.html`,
+  `sponsors.html`) read the event via `.Parent.Params` and render the shared sub-nav
+  (`layouts/partials/event-subnav.html`).
+- **Top navigation** is site-level (Home, Events, Become a Sponsor, Past Events);
+  event-specific links live in the per-event sub-nav.

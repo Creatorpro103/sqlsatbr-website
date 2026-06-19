@@ -1,78 +1,73 @@
 groups:
   - title: Global Sponsor
     tier: global
-    logoWidth: 1000
     sponsors:
       - name: Microsoft/AMD
         url: https://aka.ms/AMD_EPYC_RelationalDB
-        logo: sponsors/2026/ms-amd.png
+        logo: sponsors/dodbr-2026/ms-amd.png
         logoFit: extra-wide
   - title: Platinum Sponsors
     tier: platinum
-    logoWidth: 1000
     sponsors:
       - name: CGI
         url: https://www.cgi.com/en
-        logo: sponsors/2026/cgi.png
+        logo: sponsors/dodbr-2026/cgi.png
       - name: Envoc
         url: https://envoc.com/
-        logo: sponsors/2026/envoc.jpg
+        logo: sponsors/dodbr-2026/envoc.jpg
       - name: Excella
         url: https://www.excella.com/
-        logo: sponsors/2026/excella.jpg
+        logo: sponsors/dodbr-2026/excella.jpg
       - name: Red Gate
         url: https://www.red-gate.com/
-        logo: sponsors/2026/red-gate.svg
+        logo: sponsors/dodbr-2026/red-gate.svg
   - title: Facility Sponsor
     tier: facility
-    logoWidth: 1000
     sponsors:
       - name: Louisiana State University
         url: https://www.lsu.edu/business/sdeis/index.php
-        logo: sponsors/2026/lsu-sdeis-logo.png
+        logo: sponsors/dodbr-2026/lsu-sdeis-logo.png
   - title: Gold Sponsors
     tier: gold
-    logoWidth: 800
     sponsors:
       - name: Louisiana Blue
         url: https://www.lablue.com/
-        logo: sponsors/2026/bcbsla.jpg
+        logo: sponsors/dodbr-2026/bcbsla.jpg
       - name: DBADuck
         url: http://www.dbaduck.com/
-        logo: sponsors/2026/dbaduck.png
+        logo: sponsors/dodbr-2026/dbaduck.png
       - name: EisnerAmper
         url: https://www.eisneramper.com/
-        logo: sponsors/2026/eisneramper.jpg
+        logo: sponsors/dodbr-2026/eisneramper.jpg
         logoFit: extra-wide
       - name: ISACA Baton Rouge
         url: https://engage.isaca.org/batonrougechapter/home
-        logo: sponsors/2026/isaca-baton-rouge.jpg
+        logo: sponsors/dodbr-2026/isaca-baton-rouge.jpg
       - name: MMR
         url: https://mmrgrp.com/
-        logo: sponsors/2026/mmr.svg
+        logo: sponsors/dodbr-2026/mmr.svg
       - name: Pathfinder Data Strategy
         url: https://www.pathfinderdatastrategy.com/
-        logo: sponsors/2026/pathfinder.png
+        logo: sponsors/dodbr-2026/pathfinder.png
       - name: ServiceNow
         url: https://www.servicenow.com/
-        logo: sponsors/2026/servicenow.png
+        logo: sponsors/dodbr-2026/servicenow.png
       - name: TekChix
         url: https://thetekchix.com/
-        logo: sponsors/2026/tekchix.png
+        logo: sponsors/dodbr-2026/tekchix.png
   - title: Silver Sponsors
     tier: silver
-    logoWidth: 600
     sponsors:
       - name: ISC2
         url: http://isc2-cgcchapter.org/
-        logo: sponsors/2026/isc2.png
+        logo: sponsors/dodbr-2026/isc2.png
       - name: Louisiana Technology Industry Association
         url: https://www.techinla.net/
-        logo: sponsors/2026/ltia.png
+        logo: sponsors/dodbr-2026/ltia.png
         logoFit: extra-wide
       - name: The Personnel Consulting Group
         url: http://www.pcgrecruit.com/
-        logo: sponsors/2026/pcg.png
+        logo: sponsors/dodbr-2026/pcg.png
       - name: Sparkhound
         url: https://sparkhound.com/
-        logo: sponsors/2026/sparkhound.png
+        logo: sponsors/dodbr-2026/sparkhound.png

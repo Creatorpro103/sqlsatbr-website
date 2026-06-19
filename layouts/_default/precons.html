@@ -1,11 +1,13 @@
 {{ define "main" }}
+  {{ $event := .Parent }}
   <header class="page-header">
     <div class="page-header-inner">
       <h2>{{ .Title }}</h2>
-      {{ with .Params.intro }}<p class="page-header-lede">{{ . }}</p>{{ end }}
+      {{ with $event.Params.preconsIntro }}<p class="page-header-lede">{{ . }}</p>{{ end }}
     </div>
   </header>
-  {{ range $i, $p := .Params.precons }}
+  {{ partial "event-subnav.html" $event }}
+  {{ range $i, $p := $event.Params.precons }}
     <section class="section{{ if eq (mod $i 2) 1 }} section-light{{ end }}">
       <div class="section-inner stack">
         <div class="precon-session stack">

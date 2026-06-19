@@ -10,27 +10,15 @@ menu:
     - name: Home
       pageRef: /
       weight: 10
-    - name: Become a Volunteer
-      pageRef: /become-a-volunteer
+    - name: Events
+      pageRef: /events
       weight: 20
     - name: Become a Sponsor
       pageRef: /become-a-sponsor
       weight: 30
-    - name: Sponsors
-      pageRef: /sponsors
-      weight: 40
-    - name: PreCons
-      pageRef: /precons
-      weight: 50
-    - name: Schedule
-      pageRef: /schedule
-      weight: 60
-    - name: Speakers
-      pageRef: /speakers
-      weight: 70
     - name: Past Events
       pageRef: /archive
-      weight: 80
+      weight: 40
 
 taxonomies: {}
 

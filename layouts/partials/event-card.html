@@ -1,0 +1,7 @@
+{{/* Context: an event section page. Compact card for listings. */}}
+<a class="event-card stack stack-tight" href="{{ .RelPermalink }}">
+  {{ with .Params.dateRange }}<p class="event-card-date">{{ . }}</p>{{ end }}
+  <h3>{{ .Title }}</h3>
+  {{ with .Params.eventVenueName }}<p class="event-card-venue">{{ . }}</p>{{ end }}
+  <span class="event-card-link">View details &rarr;</span>
+</a>

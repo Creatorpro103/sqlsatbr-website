@@ -27,4 +27,4 @@ Use the form below to submit your **Sponsor Intake** for the 2026 Event Year. Af
 ## Before you submit
 
 - Review the current [Sponsor Packages]({{< relref "become-a-sponsor.md" >}}) for package pricing and booth-space guidance.
-- Review the current [Sponsor Listings]({{< relref "sponsors.md" >}}) to see the approved 2026 sponsor mix.
+- Review the current [Sponsor Listings]({{< relref "/events/dodbr-2026/sponsors.md" >}}) to see the approved 2026 sponsor mix.

@@ -1,71 +1,59 @@
 {{ define "main" }}
-  {{ $currentEventYear := site.GetPage (printf "/event-years/%s" .Params.currentEventYear) }}
-  <section class="hero">
-    <div class="hero-inner stack">
-      <img class="hero-logo" src="{{ "DodBR2026.png" | relURL }}" alt="Day of Data Baton Rouge logo" width="120" height="120">
-      {{ with $currentEventYear }}<p class="hero-date">{{ .Params.dateRange }}</p>{{ end }}
-      <h2 class="hero-title">Day of Data Baton Rouge {{ .Params.currentEventYear }}</h2>
-      <p class="hero-tagline">{{ site.Params.tagline }}</p>
-      {{ with $currentEventYear }}
+  {{ $events := (site.GetPage "/events").Sections }}
+  {{ $today := now.Format "2006-01-02" }}
+  {{ $upcoming := sort (where $events "Params.startdate" "ge" $today) "Params.startdate" "asc" }}
+  {{ $past := sort (where $events "Params.startdate" "lt" $today) "Params.startdate" "desc" }}
+  {{ $featured := "" }}
+  {{ $rest := slice }}
+  {{ if $upcoming }}
+    {{ $featured = index $upcoming 0 }}
+    {{ $rest = after 1 $upcoming }}
+  {{ else if $past }}
+    {{ $featured = index $past 0 }}
+  {{ end }}
+
+  {{ with $featured }}
+    <section class="hero">
+      <div class="hero-inner stack">
+        <img class="hero-logo" src="{{ "DodBR2026.png" | relURL }}" alt="Day of Data Baton Rouge logo" width="120" height="120">
+        {{ with .Params.dateRange }}<p class="hero-date">{{ . }}</p>{{ end }}
+        <h2 class="hero-title">{{ .Title }}</h2>
+        {{ with .Params.intro }}<p class="hero-tagline">{{ . }}</p>{{ end }}
         <div class="button-row hero-actions">
-          <a class="button button-hero" href="{{ .Params.registrationUrl }}">RSVP / Register</a>
-          {{ with site.GetPage "/schedule" }}<a class="button button-hero-ghost" href="{{ .RelPermalink }}">View Schedule</a>{{ end }}
+          {{ with .Params.registrationUrl }}<a class="button button-hero" href="{{ . }}">RSVP / Register</a>{{ end }}
+          <a class="button button-hero-ghost" href="{{ .RelPermalink }}">Event details</a>
         </div>
-      {{ end }}
-    </div>
-  </section>
+      </div>
+    </section>
+  {{ end }}
 
   <section class="section section-light">
     <div class="section-inner stack">
-      <h2 class="section-heading">About the event</h2>
-      <div class="prose lede-prose">{{ .Content }}</div>
-    </div>
-  </section>
-
-  {{ with $currentEventYear }}
-  <section class="section">
-    <div class="section-inner stack">
-      <h2 class="section-heading">When &amp; where</h2>
-      <div class="venue-grid">
-        <div class="venue-card stack stack-tight">
-          <p class="venue-day">Friday &middot; PreCons</p>
-          <h3>{{ .Params.preconsVenueName }}</h3>
-          <p>{{ .Params.preconsVenueAddress }}</p>
-        </div>
-        <div class="venue-card stack stack-tight">
-          <p class="venue-day">Saturday &middot; Main Event</p>
-          <h3>{{ .Params.eventVenueName }}</h3>
-          <p>{{ .Params.eventVenueAddress }}</p>
-        </div>
-      </div>
-      <dl class="facts-grid">
-        <div>
-          <dt>Date</dt>
-          <dd>{{ .Params.dateRange }}</dd>
-        </div>
-        <div>
-          <dt>Cost</dt>
-          <dd>Free to attend</dd>
-        </div>
-        <div>
-          <dt>Hosted by</dt>
-          <dd>Baton Rouge User Groups</dd>
-        </div>
-      </dl>
-    </div>
-  </section>
-
-  <section class="section section-light">
-    <div class="section-inner stack">
-      <h2 class="section-heading">What to expect</h2>
-      <div class="prose">{{ .Content }}</div>
-      <div class="button-row">
-        <a class="button" href="{{ .Params.registrationUrl }}">Register</a>
-        {{ with site.GetPage "/speakers" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Speakers</a>{{ end }}
-        {{ with site.GetPage "/sponsors" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Sponsors</a>{{ end }}
-        {{ with site.GetPage "/become-a-volunteer" }}<a class="button button-secondary" href="{{ .RelPermalink }}">Volunteer</a>{{ end }}
+      <h2 class="section-heading">About</h2>
+      <div class="prose lede-prose">
+        <p>Day of Data Baton Rouge is a series of <strong>free</strong> data and technology events hosted by the <strong>Baton Rouge User Groups</strong> — bringing IT and Microsoft Data Platform professionals, students, and tech enthusiasts together for expert-led training, career insights, and networking.</p>
       </div>
     </div>
   </section>
+
+  {{ with $rest }}
+    <section class="section">
+      <div class="section-inner stack">
+        <h2 class="section-heading">More upcoming events</h2>
+        <div class="event-grid">
+          {{ range . }}{{ partial "event-card.html" . }}{{ end }}
+        </div>
+      </div>
+    </section>
+  {{ end }}
+
+  {{ with site.GetPage "/archive" }}
+    <section class="section section-light">
+      <div class="section-inner stack">
+        <h2 class="section-heading">Past events</h2>
+        <p>Browse the history of Baton Rouge data events.</p>
+        <div class="button-row"><a class="button button-secondary" href="{{ .RelPermalink }}">View past events</a></div>
+      </div>
+    </section>
   {{ end }}
 {{ end }}

@@ -285,6 +285,99 @@ body {
   font-size: 1.1rem;
 }
 
+/* Event sub-navigation (per-event page bar) */
+.event-subnav {
+  background: var(--brand-navy-dark);
+}
+
+.event-subnav-inner {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1rem;
+}
+
+.event-subnav-title {
+  font-family: "Arvo", Georgia, serif;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: auto;
+}
+
+.event-subnav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+}
+
+.event-subnav-links a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+}
+
+.event-subnav-links a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.event-subnav-links a.event-subnav-register {
+  background: #ffffff;
+  color: var(--brand-navy);
+}
+
+/* Event listing cards */
+.event-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.event-card {
+  display: block;
+  padding: 1.5rem;
+  border: 1px solid var(--brand-border);
+  border-left: 5px solid var(--brand-navy);
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: inherit;
+  text-decoration: none;
+}
+
+.event-card:hover {
+  box-shadow: 0 12px 24px rgba(18, 32, 51, 0.1);
+}
+
+.event-card h3 {
+  margin: 0;
+}
+
+.event-card-date {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-navy);
+}
+
+.event-card-venue {
+  margin: 0;
+  color: var(--brand-muted);
+}
+
+.event-card-link {
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
 /* Sessionize schedule embed */
 .schedule-embed {
   margin-top: 0.5rem;
