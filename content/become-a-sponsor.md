@@ -1,10 +1,16 @@
 ---
 title: Become a Sponsor
-description: Sponsorship opportunities for Day of Data Baton Rouge 2026.
+description: Sponsor Day of Data Baton Rouge 2026 and reach hundreds of local IT professionals.
 wide: true
 ---
 
-We appreciate your time to consider sponsoring Day of Data Baton Rouge 2026! We've put together some information that will tell you about our plans for the event. Your company has multiple sponsorship opportunities to maximize your Day of Data Baton Rouge 2026 presence to hundreds of local IT professionals.
+Day of Data Baton Rouge is a **free, all-day technology conference** hosted by the Baton Rouge User Groups — and it runs entirely on sponsor support. Now in its **14th year**, the event draws **450+ attendees**: SQL Server, data, .NET, cloud, BI, and IT professionals, plus students and folks in career transition from across the region. For sponsors it's a one-stop shop for **recruiting, brand exposure, and IT staff training** — and a way to give back to the local tech community.
+
+Your support also funds our community impact: we've donated thousands to the Foundation for East Baton Rouge Parish Schools and host a kids' STEM track for 4th–8th graders.
+
+## Who you'll reach
+
+SQL Server & database administrators, BI and ETL developers, data analysts, C#/.NET and mobile developers, Windows and network admins, QA analysts, project managers, IT managers and CIOs, and students.
 
 ## Sponsorship packages
 
@@ -20,9 +26,25 @@ We appreciate your time to consider sponsoring Day of Data Baton Rouge 2026! We'
 | Exclusive Presence Options | No | No | No | No | No | Yes |
 | Premium Booth Space | No | No | No | No | No | Available |
 
+Booth space is **limited and reserved first-come, first-served at time of payment** — we've sold out a month early the last two years. Silver, Gold, and Unattended Booth tiers each have only a handful of spots.
+
+**Platinum sponsorships are exclusive and fully customizable** — for example the pre-conference banquet sponsor, the prime "big booth" in the atrium, the breakfast/lunch/snack sponsor, or your own creative idea. Each Platinum option is one-of-a-kind and limited to a single sponsor.
+
+Donating books for our library and day-end raffle? Ask about our free **Book Sponsor** option.
+
+## Payment
+
+All sponsorships are **prepaid**. Pay by PayPal or credit card to sqlpassbr@gmail.com, or by check made out to **Baton Rouge User Groups** (a local not-for-profit). We can provide an official invoice on request.
+
+## Key dates (2026)
+
+- **Sponsor registration & payment:** by **July 1, 2026**
+- **Bag insert materials due:** by **July 7, 2026**
+- **Event day:** **July 18, 2026** — LSU Business Education Complex, Baton Rouge
+
 ## Ready to sponsor?
 
-Please contact us at [sqlpassbr@gmail.com](mailto:sqlpassbr@gmail.com) with any questions.
+Please contact us at [sqlpassbr@gmail.com](mailto:sqlpassbr@gmail.com) with any questions. All sponsor and booth personnel are asked to follow our [Code of Conduct]({{< relref "/code-of-conduct.md" >}}).
 
 - [Submit sponsor interest for the 2026 Event Year](https://docs.google.com/forms/d/e/1FAIpQLSeYTQBlIC2UByJCf1vqn6JabDY0nz3ToNRKf6TCQ6YbxPIFsQ/viewform)
 - [Request an invoice for the 2026 Event Year]({{< relref "invoice-request.md" >}})
