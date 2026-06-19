@@ -13,8 +13,7 @@ Complete the form below to confirm your sponsorship. We'll generate a **PayPal i
 2. Primary contact name, email, and phone
 3. Requested Sponsor Package
 4. Billing / accounts payable email
-5. Preferred payment method
-6. Your website and a link to your logo (for the Sponsor Listing)
+5. Your website and a link to your logo (for the Sponsor Listing)
 
 ## Before you submit
 

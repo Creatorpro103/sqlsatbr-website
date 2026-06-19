@@ -346,7 +346,6 @@ async function relayToGoogleForm(submission, packageAmount, env) {
       sponsorPackage: submission.sponsorPackage,
       packageAmount,
       billingContactEmail: submission.billingContactEmail,
-      preferredPaymentMethod: submission.preferredPaymentMethod,
       sponsorWebsite: submission.sponsorWebsite,
       logoUrl: submission.logoUrl,
       notes: submission.notes,
@@ -424,7 +423,6 @@ function normalizePayload(payload) {
     contactPhone: normalizeText(payload.contactPhone),
     sponsorPackage: normalizeText(payload.sponsorPackage),
     billingContactEmail: normalizeEmail(payload.billingContactEmail),
-    preferredPaymentMethod: normalizeText(payload.preferredPaymentMethod),
     sponsorWebsite: normalizeText(payload.sponsorWebsite),
     logoUrl: normalizeText(payload.logoUrl),
     notes: normalizeText(payload.notes),
@@ -441,7 +439,6 @@ function validateSubmission(submission) {
   if (!submission.contactPhone) errors.push("contactPhone");
   if (!submission.sponsorPackage) errors.push("sponsorPackage");
   if (!looksLikeEmail(submission.billingContactEmail)) errors.push("billingContactEmail");
-  if (!submission.preferredPaymentMethod) errors.push("preferredPaymentMethod");
   if (!looksLikeUrl(submission.sponsorWebsite)) errors.push("sponsorWebsite");
   if (submission.logoUrl && !looksLikeUrl(submission.logoUrl)) errors.push("logoUrl");
   if (submission.companyWebsite) errors.push("companyWebsite");
@@ -476,7 +473,6 @@ function buildInvoiceLineDescription(submission) {
     `Primary contact: ${submission.primaryContactName}`,
     `Contact email: ${submission.contactEmail}`,
     `Contact phone: ${submission.contactPhone}`,
-    `Preferred payment method: ${submission.preferredPaymentMethod}`,
   ].join(" | ");
 }
 
@@ -487,7 +483,6 @@ function buildInvoiceNote(submission) {
     `Contact email: ${submission.contactEmail}`,
     `Contact phone: ${submission.contactPhone}`,
     `Billing email: ${submission.billingContactEmail}`,
-    `Preferred payment method: ${submission.preferredPaymentMethod}`,
   ];
 
   if (submission.sponsorWebsite) {
