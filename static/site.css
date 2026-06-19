@@ -804,7 +804,8 @@ a {
 .sponsor-grid-facility,
 .sponsor-grid-platinum,
 .sponsor-grid-gold,
-.sponsor-grid-silver {
+.sponsor-grid-silver,
+.sponsor-grid-bronze {
   align-items: stretch;
 }
 
@@ -838,12 +839,9 @@ a {
   height: 8.5rem;
 }
 
-.sponsor-card-silver {
-  height: 7.75rem;
-}
-
+.sponsor-card-silver,
 .sponsor-card-bronze {
-  height: 6.75rem;
+  height: 7.75rem;
 }
 
 .sponsor-card:hover {
@@ -896,7 +894,8 @@ a {
   height: 3.9rem;
 }
 
-.sponsor-logo-frame-silver {
+.sponsor-logo-frame-silver,
+.sponsor-logo-frame-bronze {
   height: 3.1rem;
 }
 
@@ -931,7 +930,8 @@ a {
   max-width: 13.5rem;
 }
 
-.sponsor-logo-silver {
+.sponsor-logo-silver,
+.sponsor-logo-bronze {
   max-width: 10.75rem;
 }
 
@@ -964,7 +964,8 @@ a {
     grid-template-columns: repeat(2, minmax(0, 18rem));
   }
 
-  .sponsor-grid-silver {
+  .sponsor-grid-silver,
+  .sponsor-grid-bronze {
     grid-template-columns: repeat(2, minmax(0, 16rem));
   }
 }
@@ -974,7 +975,8 @@ a {
     grid-template-columns: repeat(3, minmax(0, 16rem));
   }
 
-  .sponsor-grid-silver {
+  .sponsor-grid-silver,
+  .sponsor-grid-bronze {
     grid-template-columns: repeat(4, minmax(0, 12rem));
   }
 }
@@ -984,7 +986,8 @@ a {
     grid-template-columns: repeat(4, minmax(0, 14rem));
   }
 
-  .sponsor-grid-silver {
+  .sponsor-grid-silver,
+  .sponsor-grid-bronze {
     grid-template-columns: repeat(5, minmax(0, 11rem));
   }
 }

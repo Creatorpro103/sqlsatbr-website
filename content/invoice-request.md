@@ -28,3 +28,17 @@ Use the form below to submit your **Sponsor Intake** for the 2026 Event Year. Af
 
 - Review the current [Sponsor Packages]({{< relref "become-a-sponsor.md" >}}) for package pricing and booth-space guidance.
 - Review the current [Sponsor Listings]({{< relref "/events/dodbr-2026/sponsors.md" >}}) to see the approved 2026 sponsor mix.
+
+## Mailing &amp; payment
+
+Make checks payable to **Baton Rouge User Groups** — the local not-for-profit that operates the event. We can provide an official invoice on request.
+
+Mail payment, booth materials, and bag inserts to:
+
+Baton Rouge User Groups  
+9618 Jefferson Hwy  
+Suite D Box 113  
+Baton Rouge, LA 70809  
+(225) 755-9325
+
+Sponsor payment is due by **July 1, 2026**, and bag insert materials are due by **July 7, 2026**.
