@@ -6,6 +6,9 @@ groups:
         url: https://aka.ms/AMD_EPYC_RelationalDB
         logo: sponsorlogos/ms-amd.png
         logoFit: extra-wide
+      - name: Zombo.com
+        url: www.zombo.com
+        logo: sponsorlogos/servicenow.png
   - title: Platinum Sponsors
     tier: platinum
     sponsors:
