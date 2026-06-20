@@ -94,7 +94,7 @@ volunteerUrl: https://…        # SignupGenius (omit ⇒ no Volunteer link)
 preconsVenueName / preconsVenueAddress
 eventVenueName / eventVenueAddress
 preconsIntro: ...              # only if it has PreCons
-precons: [...]                 # only if it has PreCons (see dodbr-2026 for the shape)
+preconsKey: spring-2027        # data/precons/spring-2027.yaml (omit ⇒ no PreCons page)
 ---
 
 Body copy describing the event (shown in the "About the event" section).
@@ -114,7 +114,7 @@ lighter event lighter. Copy from `content/events/dodbr-2026/`:
 | ---- | ---- | ----- |
 | `schedule.md` | Schedule (Sessionize grid) | `sessionizeId` on the event |
 | `speakers.md` | Speakers (Sessionize wall) | `sessionizeId` on the event |
-| `precons.md`  | PreCons workshops | `precons` on the event |
+| `precons.md`  | PreCons workshops | `preconsKey` + data file |
 | `sponsors.md` | Sponsor listings | `sponsorsKey` + data file |
 
 (You can also add `aliases:` in a sub-page if you want a short URL to redirect to it.)
@@ -124,11 +124,11 @@ lighter event lighter. Copy from `content/events/dodbr-2026/`:
 If the event has sponsors, create `data/sponsors/<slug>.yaml` and
 `static/sponsors/<slug>/` (see section 1 for the format).
 
-### Step 4 — PreCons headshots
+### Step 4 — PreCons data and headshots
 
-If the event has PreCons, add instructor headshots to `static/precons/` and point each
-workshop's `photo:` at them. (For the current event they were sourced from each
-speaker's Sessionize profile.)
+If the event has PreCons, create `data/precons/<slug>.yaml` with the workshop and
+instructor data (see `data/precons/dodbr-2026.yaml` for the shape), then add instructor
+headshots to `static/precons/` and point each workshop's `photo:` at them.
 
 ### Step 5 — Preview and publish
 
