@@ -936,20 +936,20 @@ a {
 
 .sponsor-logo-global,
 .sponsor-logo-platinum {
-  max-width: 16.5rem;
+  max-width: min(16.5rem, 100%);
 }
 
 .sponsor-logo-facility {
-  max-width: 13rem;
+  max-width: min(13rem, 100%);
 }
 
 .sponsor-logo-gold {
-  max-width: 13.5rem;
+  max-width: min(13.5rem, 100%);
 }
 
 .sponsor-logo-silver,
 .sponsor-logo-bronze {
-  max-width: 10.75rem;
+  max-width: min(10.75rem, 100%);
 }
 
 .sponsor-name {

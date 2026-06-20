@@ -71,6 +71,9 @@ groups:
       - name: Sparkhound
         url: https://sparkhound.com/
         logo: sponsors/dodbr-2026/sparkhound.png
+      - name: Forward Data Consultants
+        url: moveforward.co
+        logo: sponsors/dodbr-2026/Forward-Data-Consultants.png
   - title: Bronze Sponsors
     tier: bronze
     sponsors:
