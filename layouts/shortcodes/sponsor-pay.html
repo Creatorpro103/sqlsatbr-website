@@ -1,6 +1,8 @@
 {{/* Primary CTA to the sponsor sign-up / payment form. */}}
 <div class="button-row">
-  {{ with site.GetPage "/invoice-request" }}
-    <a class="button" href="{{ .RelPermalink }}">Sign up &amp; pay online</a>
+  {{ with .Page.Parent }}
+    {{ with .GetPage "invoice-request" }}
+      <a class="button" href="{{ .RelPermalink }}">Sign up &amp; pay online</a>
+    {{ end }}
   {{ end }}
 </div>

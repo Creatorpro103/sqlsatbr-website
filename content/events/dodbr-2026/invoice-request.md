@@ -3,6 +3,9 @@ title: Sponsor Sign-Up
 description: Sign up to sponsor Day of Data Baton Rouge 2026 and pay your invoice online — by card, PayPal, or AP/check.
 layout: invoice-request
 workerEndpoint: https://sqlsatbr-website.kneal30.workers.dev/api/invoice-request
+aliases: ["/invoice-request/"]
+build:
+  list: never
 ---
 
 Complete the form below to confirm your sponsorship. We'll generate a **PayPal invoice for your selected package** that you can **pay immediately by card or PayPal** — or pay later if your organization needs accounts payable, ACH, or check processing.
@@ -17,7 +20,7 @@ Complete the form below to confirm your sponsorship. We'll generate a **PayPal i
 
 ## Before you submit
 
-- Review the current [Sponsor Packages]({{< relref "become-a-sponsor.md" >}}) for package pricing and booth-space guidance.
+- Review the current [Sponsor Packages]({{< relref "/events/dodbr-2026/become-a-sponsor.md" >}}) for package pricing and booth-space guidance.
 - Review the current [Sponsor Listings]({{< relref "/events/dodbr-2026/sponsors.md" >}}) to see the approved 2026 sponsor mix.
 
 ## Mailing &amp; payment

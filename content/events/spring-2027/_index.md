@@ -21,4 +21,4 @@ secondaryColor: "#f4b400"
 
 We're planning a spring **Day of Data Baton Rouge** for 2027. Venue, registration, schedule, and speakers will be announced here as they're confirmed.
 
-Interested in supporting the event? Learn how to [Become a Sponsor]({{< relref "/become-a-sponsor.md" >}}).
+Interested in supporting the event? Learn how to [Become a Sponsor]({{< relref "/events/spring-2027/become-a-sponsor.md" >}}).
