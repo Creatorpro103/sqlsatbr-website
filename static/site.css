@@ -983,7 +983,7 @@ a {
 
   .sponsor-grid-silver,
   .sponsor-grid-bronze {
-    grid-template-columns: repeat(2, minmax(0, 16rem));
+    grid-template-columns: repeat(auto-fit, minmax(7rem, 16rem));
   }
 }
 
@@ -994,7 +994,7 @@ a {
 
   .sponsor-grid-silver,
   .sponsor-grid-bronze {
-    grid-template-columns: repeat(4, minmax(0, 12rem));
+    grid-template-columns: repeat(auto-fit, minmax(7rem, 12rem));
   }
 }
 
@@ -1005,7 +1005,7 @@ a {
 
   .sponsor-grid-silver,
   .sponsor-grid-bronze {
-    grid-template-columns: repeat(5, minmax(0, 11rem));
+    grid-template-columns: repeat(auto-fit, minmax(7rem, 11rem));
   }
 }
 
