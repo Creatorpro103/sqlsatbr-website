@@ -216,18 +216,18 @@ async function getPayPalAccessToken(env) {
   return body.access_token;
 }
 
-async function createPayPalInvoice(submission, packageAmount, accessToken, env) {
+export function buildPayPalPayload(submission, packageAmount) {
   const contactName = splitName(submission.primaryContactName);
   const invoiceDate = new Date().toISOString().slice(0, 10);
 
-  const payload = {
+  return {
     detail: {
       currency_code: "USD",
       invoice_date: invoiceDate,
       reference: buildReference(submission),
       note: buildInvoiceNote(submission),
       term: "Due on receipt",
-      memo: `Day of Data Baton Rouge 2026 ${submission.sponsorPackage} sponsor invoice`,
+      memo: `${submission.eventName} ${submission.sponsorPackage} sponsor invoice`,
     },
     primary_recipients: [
       {
@@ -242,7 +242,7 @@ async function createPayPalInvoice(submission, packageAmount, accessToken, env) 
     ],
     items: [
       {
-        name: `Day of Data Baton Rouge 2026 ${submission.sponsorPackage} Sponsorship`,
+        name: `${submission.eventName} ${submission.sponsorPackage} Sponsorship`,
         description: buildInvoiceLineDescription(submission),
         quantity: "1",
         unit_amount: {
@@ -252,6 +252,10 @@ async function createPayPalInvoice(submission, packageAmount, accessToken, env) 
       },
     ],
   };
+}
+
+async function createPayPalInvoice(submission, packageAmount, accessToken, env) {
+  const payload = buildPayPalPayload(submission, packageAmount);
 
   if (env.PAYPAL_INVOICER_EMAIL) {
     payload.invoicer = {
@@ -417,6 +421,7 @@ async function parsePayload(request) {
 
 function normalizePayload(payload) {
   return {
+    eventName: normalizeText(payload.eventName),
     organizationName: normalizeText(payload.organizationName),
     primaryContactName: normalizeText(payload.primaryContactName),
     contactEmail: normalizeEmail(payload.contactEmail),
@@ -430,9 +435,10 @@ function normalizePayload(payload) {
   };
 }
 
-function validateSubmission(submission) {
+export function validateSubmission(submission) {
   const errors = [];
 
+  if (!submission.eventName) errors.push("eventName");
   if (!submission.organizationName) errors.push("organizationName");
   if (!submission.primaryContactName) errors.push("primaryContactName");
   if (!looksLikeEmail(submission.contactEmail)) errors.push("contactEmail");

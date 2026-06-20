@@ -55,9 +55,25 @@
         </label>
         <nav class="site-nav" aria-label="Primary">
           {{ $current := . }}
+          {{ $featuredEvent := partial "featured-event.html" . }}
           {{ range site.Menus.main }}
             {{ $active := or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) }}
-            <a href="{{ .URL }}"{{ if $active }} class="active" aria-current="page"{{ end }}>{{ .Name }}</a>
+            {{ $url := .URL }}
+            {{ if eq .Name "Become a Sponsor" }}
+              {{ $resolved := false }}
+              {{ with $themeEvent }}
+                {{ with .GetPage "become-a-sponsor" }}
+                  {{ $url = .RelPermalink }}
+                  {{ $resolved = true }}
+                {{ end }}
+              {{ end }}
+              {{ if not $resolved }}
+                {{ with $featuredEvent.GetPage "become-a-sponsor" }}
+                  {{ $url = .RelPermalink }}
+                {{ end }}
+              {{ end }}
+            {{ end }}
+            <a href="{{ $url }}"{{ if $active }} class="active" aria-current="page"{{ end }}>{{ .Name }}</a>
           {{ end }}
         </nav>
       </div>
