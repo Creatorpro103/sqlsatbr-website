@@ -27,7 +27,7 @@ on:
         required: false
         type: string
       logo_path:
-        description: 'Logo path relative to static/ (e.g. sponsors/dodbr-2026/acme.png — commit the file first)'
+        description: 'Logo path relative to static/ (e.g. sponsorlogos/acme.png — commit the file to static/sponsorlogos/ first)'
         required: false
         type: string
       logo_fit:
@@ -142,7 +142,7 @@ jobs:
 
           **Review checklist before merging:**
           - [ ] Sponsor name and tier are correct
-          - [ ] Logo file exists at the path specified (under \`static/sponsors/${EVENT_SLUG}/\`)
+          - [ ] Logo file exists at the path specified (under \`static/sponsorlogos/\` for returning sponsors, or event-scoped if one-time)
           - [ ] Website URL is correct and publicly accessible
           - [ ] Sponsor has paid or payment is confirmed
 
