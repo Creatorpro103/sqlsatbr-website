@@ -34,7 +34,11 @@
               {{ with .Params.dateLabel }}<p class="eyebrow">{{ . }}</p>{{ end }}
               <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
               {{ with .Description }}<p class="lede">{{ . }}</p>{{ end }}
-              {{ with .Params.legacyName }}<p><strong>Legacy event name:</strong> {{ . }}</p>{{ end }}
+              {{ with .Params.legacyName }}
+                <p><strong>Legacy event name:</strong>
+                  {{ if $.Params.legacyArchiveUrl }}<a href="{{ $.Params.legacyArchiveUrl }}">{{ . }}</a>{{ else }}{{ . }}{{ end }}
+                </p>
+              {{ end }}
             </article>
           {{ end }}
         </div>
