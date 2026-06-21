@@ -1,0 +1,72 @@
+name: Sponsor Intake
+description: Add a new sponsor to an event listing
+title: "[Sponsor] "
+labels: ["sponsor-intake"]
+body:
+  - type: dropdown
+    id: event_slug
+    attributes:
+      label: Event
+      description: Which event is this sponsor supporting?
+      options:
+        - dodbr-2026
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Sponsor Tier
+      options:
+        - global
+        - platinum
+        - facility
+        - gold
+        - silver
+        - bronze
+    validations:
+      required: true
+
+  - type: input
+    id: sponsor_name
+    attributes:
+      label: Sponsor Name
+      description: Exactly as it should appear publicly on the site
+    validations:
+      required: true
+
+  - type: input
+    id: sponsor_url
+    attributes:
+      label: Sponsor Website URL
+      placeholder: "https://"
+
+  - type: input
+    id: logo_url
+    attributes:
+      label: Logo URL
+      description: >
+        Public URL to fetch the logo from — the workflow downloads it automatically
+        and names the file from the sponsor name. Leave blank if uploading the logo
+        file manually to `static/sponsorlogos/`.
+      placeholder: "https://"
+
+  - type: input
+    id: logo_path
+    attributes:
+      label: Logo Filename
+      description: >
+        Filename already in `static/sponsorlogos/` (e.g. `acme.png`). Only used
+        if Logo URL above is left blank.
+      placeholder: "acme.png"
+
+  - type: dropdown
+    id: logo_fit
+    attributes:
+      label: Logo Fit
+      description: Use "wide" or "extra-wide" for very wide horizontal logos.
+      options:
+        - standard
+        - wide
+        - extra-wide
+      default: 0

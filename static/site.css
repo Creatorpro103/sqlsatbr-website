@@ -845,20 +845,20 @@ a {
 
 .sponsor-card-global,
 .sponsor-card-platinum {
-  height: 9.75rem;
+  height: 12rem;
 }
 
 .sponsor-card-facility {
-  height: 9.75rem;
+  height: 12rem;
 }
 
 .sponsor-card-gold {
-  height: 8.5rem;
+  height: 10rem;
 }
 
 .sponsor-card-silver,
 .sponsor-card-bronze {
-  height: 7.75rem;
+  height: 9rem;
 }
 
 .sponsor-card:hover {
@@ -872,7 +872,7 @@ a {
 
 .sponsor-card-no-logo {
   height: auto;
-  min-height: 5.5rem;
+  min-height: 6.5rem;
 }
 
 .sponsor-card-no-logo .sponsor-name {
@@ -900,20 +900,20 @@ a {
 
 .sponsor-logo-frame-global,
 .sponsor-logo-frame-platinum {
-  height: 4.75rem;
+  height: 6.5rem;
 }
 
 .sponsor-logo-frame-facility {
-  height: 4.75rem;
+  height: 6.5rem;
 }
 
 .sponsor-logo-frame-gold {
-  height: 3.9rem;
+  height: 5.25rem;
 }
 
 .sponsor-logo-frame-silver,
 .sponsor-logo-frame-bronze {
-  height: 3.1rem;
+  height: 4.25rem;
 }
 
 .sponsor-logo {
@@ -936,20 +936,20 @@ a {
 
 .sponsor-logo-global,
 .sponsor-logo-platinum {
-  max-width: min(16.5rem, 100%);
+  max-width: min(22rem, 100%);
 }
 
 .sponsor-logo-facility {
-  max-width: min(13rem, 100%);
+  max-width: min(17.5rem, 100%);
 }
 
 .sponsor-logo-gold {
-  max-width: min(13.5rem, 100%);
+  max-width: min(18rem, 100%);
 }
 
 .sponsor-logo-silver,
 .sponsor-logo-bronze {
-  max-width: min(10.75rem, 100%);
+  max-width: min(14.5rem, 100%);
 }
 
 .sponsor-name {
