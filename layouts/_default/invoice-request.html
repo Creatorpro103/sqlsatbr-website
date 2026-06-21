@@ -12,6 +12,7 @@
     </div>
     <form class="intake-form stack" method="post" action="{{ .Params.workerEndpoint }}">
       <input type="hidden" name="eventName" value="{{ .Parent.Title }}">
+      <input type="hidden" name="eventSlug" value="{{ .Params.eventSlug }}">
       <div class="intake-grid">
         <label class="field stack-tight" for="organizationName">
           <span>Sponsor organization name</span>

@@ -162,6 +162,9 @@ async function handleInvoiceRequest(request, env) {
     await sendPayPalInvoice(invoice.id, accessToken, env);
     const payUrl = await getInvoicePayUrl(invoice.id, accessToken, env);
 
+    // Open a PII-free GitHub issue for the organizer workflow (best-effort).
+    await createGitHubIssue(submission, buildReference(submission), packageAmount, env);
+
     // Mirror the submission into the organizers' Google Sheet (best-effort).
     await relayToGoogleForm(submission, packageAmount, env);
 
@@ -344,6 +347,75 @@ async function getInvoicePayUrl(invoiceId, accessToken, env) {
   return "";
 }
 
+export function buildGitHubIssueBody(submission, invoiceRef, packageAmount) {
+  const logoUrl = submission.logoUrl || "_No response_";
+  const websiteUrl = submission.sponsorWebsite || "_No response_";
+  const eventSlug = submission.eventSlug || "_No response_";
+
+  return [
+    `### Sponsor Tier`,
+    submission.sponsorPackage,
+    ``,
+    `### Event`,
+    eventSlug,
+    ``,
+    `### Sponsor Name`,
+    submission.organizationName,
+    ``,
+    `### Sponsor Website URL`,
+    websiteUrl,
+    ``,
+    `### Logo URL`,
+    logoUrl,
+    ``,
+    `### Logo Filename`,
+    `_No response_`,
+    ``,
+    `### Logo Fit`,
+    `standard`,
+    ``,
+    `---`,
+    `**Invoice reference:** ${invoiceRef}`,
+    `**Invoice amount:** $${packageAmount}`,
+    ``,
+    `**Team checklist:**`,
+    `- [ ] Confirm payment received against the invoice reference above`,
+    `- [ ] Confirm sponsor tier and package match the invoice`,
+    `- [ ] Verify the sponsor listing PR looks correct before merging`,
+    `- [ ] Merge the PR to publish the sponsor on the live site`,
+    ``,
+    `> No PII in this issue. Full contact details are in the PayPal invoice.`,
+  ].join("\n");
+}
+
+async function createGitHubIssue(submission, invoiceRef, packageAmount, env) {
+  const repo = normalizeText(env && env.GITHUB_REPO);
+  const pat = normalizeText(env && env.GITHUB_PAT);
+  if (!repo || !pat) {
+    return;
+  }
+
+  try {
+    await fetch(`https://api.github.com/repos/${repo}/issues`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${pat}`,
+        "Content-Type": "application/json",
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "sqlsatbr-sponsor-worker",
+      },
+      body: JSON.stringify({
+        title: `Sponsor intake: ${submission.organizationName} (${submission.sponsorPackage}) — ${submission.eventName}`,
+        body: buildGitHubIssueBody(submission, invoiceRef, packageAmount),
+        labels: ["sponsor-intake"],
+      }),
+    });
+  } catch {
+    // Best-effort: never block the invoice response on GitHub issue creation.
+  }
+}
+
 async function relayToGoogleForm(submission, packageAmount, env) {
   const responseUrl = normalizeText(env && env.GOOGLE_FORM_RESPONSE_URL);
   const entryMapRaw = normalizeText(env && env.GOOGLE_FORM_ENTRY_MAP);
@@ -433,6 +505,7 @@ async function parsePayload(request) {
 function normalizePayload(payload) {
   return {
     eventName: normalizeText(payload.eventName),
+    eventSlug: normalizeText(payload.eventSlug),
     organizationName: normalizeText(payload.organizationName),
     primaryContactName: normalizeText(payload.primaryContactName),
     contactEmail: normalizeEmail(payload.contactEmail),

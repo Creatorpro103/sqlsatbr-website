@@ -6,4 +6,10 @@
   "observability": {
     "enabled": true
   }
+  // Secrets (set via `wrangler secret put` or Cloudflare dashboard):
+  //   PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_ENV
+  //   PAYPAL_INVOICER_EMAIL (optional)
+  //   GOOGLE_FORM_RESPONSE_URL, GOOGLE_FORM_ENTRY_MAP (optional)
+  //   GITHUB_PAT  — fine-grained PAT with Issues: write on this repo
+  //   GITHUB_REPO — e.g. "KennyNeal/sqlsatbr-website"
 }
