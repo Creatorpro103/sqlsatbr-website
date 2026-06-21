@@ -1,0 +1,191 @@
+name: Sponsor Intake
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  process-intake:
+    if: contains(github.event.issue.body, '### Sponsor Tier')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Ensure sponsor-intake label exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create "sponsor-intake" \
+            --color "0075ca" \
+            --description "Sponsor intake request" 2>/dev/null || true
+          gh issue edit "${{ github.event.issue.number }}" \
+            --add-label "sponsor-intake"
+
+      - name: Parse issue and prepare sponsor entry
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+        run: |
+          python3 << 'PYEOF'
+          import os, sys, re, urllib.request, urllib.error, yaml
+
+          body        = os.environ['ISSUE_BODY']
+          issue_url   = os.environ['ISSUE_URL']
+          github_env  = os.environ['GITHUB_ENV']
+
+          def parse_field(label, text):
+              m = re.search(rf'###\s+{re.escape(label)}\s*\n+([^\n#]+)', text)
+              if m:
+                  val = m.group(1).strip()
+                  return '' if val in ('_No response_', 'None') else val
+              return ''
+
+          event_slug = parse_field('Event', body)
+          tier       = parse_field('Sponsor Tier', body)
+          name       = parse_field('Sponsor Name', body)
+          url        = parse_field('Sponsor Website URL', body)
+          logo_url   = parse_field('Logo URL', body)
+          logo_path  = parse_field('Logo Filename', body)
+          logo_fit   = parse_field('Logo Fit', body) or 'standard'
+
+          def fail(message):
+              comment = f'## Sponsor Intake: Action Required\n\n{message}\n\nPlease edit this issue to correct the values, then close and reopen it to retry.'
+              with open('/tmp/comment.txt', 'w') as f:
+                  f.write(comment)
+              print(message, file=sys.stderr)
+              sys.exit(1)
+
+          errors = []
+          if not event_slug:
+              errors.append('- Could not read the **Event** field.')
+          if not tier:
+              errors.append('- Could not read the **Sponsor Tier** field.')
+          if not name:
+              errors.append('- Could not read the **Sponsor Name** field.')
+          if errors:
+              fail('The following fields could not be parsed:\n\n' + '\n'.join(errors))
+
+          yaml_path = f'content/events/{event_slug}/sponsors.yaml'
+          if not os.path.exists(yaml_path):
+              available = sorted(
+                  d for d in os.listdir('content/events')
+                  if os.path.isfile(f'content/events/{d}/sponsors.yaml')
+              )
+              hint = ', '.join(f'`{s}`' for s in available) or '_(none found)_'
+              fail(f'Event slug `{event_slug}` was not found. Available slugs: {hint}')
+
+          def name_to_slug(s):
+              return re.sub(r'-{2,}', '-', re.sub(r'[^a-z0-9]', '-', s.lower())).strip('-')
+
+          logo = ''
+          if logo_url:
+              ext = os.path.splitext(logo_url.split('?')[0])[-1].lstrip('.') or 'png'
+              filename  = f'{name_to_slug(name)}.{ext}'
+              logo_dest = f'static/sponsorlogos/{filename}'
+              try:
+                  urllib.request.urlretrieve(logo_url, logo_dest)
+                  print(f'Downloaded logo → {logo_dest}')
+              except urllib.error.URLError as e:
+                  fail(f'Could not download the logo from `{logo_url}`:\n\n```\n{e}\n```\n\nVerify the URL is publicly accessible and try again.')
+              logo = f'sponsorlogos/{filename}'
+          elif logo_path:
+              if '/' not in logo_path:
+                  logo_path = f'sponsorlogos/{logo_path}'
+              static_path = f'static/{logo_path}'
+              if not os.path.exists(static_path):
+                  fail(f'Logo file `{static_path}` was not found in the repository.\n\nUpload the logo to `static/sponsorlogos/` and reopen this issue, or provide a Logo URL instead.')
+              logo = logo_path
+
+          with open(yaml_path) as fh:
+              data = yaml.safe_load(fh)
+
+          group = next((g for g in data.get('groups', []) if g.get('tier') == tier), None)
+          if group is None:
+              available_tiers = [g.get('tier') for g in data.get('groups', [])]
+              fail(f'Tier `{tier}` was not found in `{yaml_path}`.\n\nAvailable tiers: {", ".join(f"`{t}`" for t in available_tiers)}')
+
+          entry = {'name': name}
+          if url:
+              entry['url'] = url
+          if logo:
+              entry['logo'] = logo
+          if logo_fit and logo_fit != 'standard':
+              entry['logoFit'] = logo_fit
+
+          group.setdefault('sponsors', []).append(entry)
+
+          with open(yaml_path, 'w') as fh:
+              yaml.dump(data, fh, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+          print(f'Added "{name}" to {tier} tier in {yaml_path}')
+
+          logo_display = f'`{logo}`' if logo else '_none — add manually to `static/sponsorlogos/` before merging_'
+          with open('/tmp/pr_body.txt', 'w') as f:
+              f.write(f"""## Sponsor Listing Update
+
+| Field | Value |
+|-------|-------|
+| Event | `{event_slug}` |
+| Tier | {tier} |
+| Sponsor | {name} |
+| URL | {url or '_none_'} |
+| Logo | {logo_display} |
+
+Opened from issue: {issue_url}
+
+**Review checklist before merging:**
+- [ ] Sponsor name and tier are correct
+- [ ] Logo renders correctly (check `static/sponsorlogos/`)
+- [ ] Website URL is correct and publicly accessible
+- [ ] Sponsor has paid or payment is confirmed
+
+Merge to publish the sponsor on the live site.
+""")
+
+          with open(github_env, 'a') as f:
+              f.write(f'SPONSOR_SLUG={name_to_slug(name)}\n')
+              f.write(f'EVENT_SLUG={event_slug}\n')
+              f.write(f'TIER={tier}\n')
+              f.write(f'SPONSOR_NAME={name}\n')
+          PYEOF
+
+      - name: Post error comment
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -f /tmp/comment.txt ]; then
+            gh issue comment "${{ github.event.issue.number }}" --body-file /tmp/comment.txt
+          fi
+
+      - name: Create branch and open PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ts=$(date +%Y%m%d%H%M%S)
+          branch="sponsor/${EVENT_SLUG}-${SPONSOR_SLUG}-${ts}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add "content/events/${EVENT_SLUG}/sponsors.yaml" static/sponsorlogos/
+          git commit -m "Add ${SPONSOR_NAME} as ${TIER} sponsor for ${EVENT_SLUG}"
+          git push origin "$branch"
+
+          pr_url=$(gh pr create \
+            --title "Add ${SPONSOR_NAME} as ${TIER} sponsor (${EVENT_SLUG})" \
+            --body-file /tmp/pr_body.txt \
+            --base main)
+
+          gh issue comment "${{ github.event.issue.number }}" --body "## PR Ready for Review
+
+The sponsor listing PR is open and ready: $pr_url
+
+Verify the logo and details look correct, then merge to publish."
