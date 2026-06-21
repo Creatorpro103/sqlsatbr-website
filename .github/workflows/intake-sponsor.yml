@@ -28,6 +28,7 @@ jobs:
             --add-label "sponsor-intake"
 
       - name: Parse issue and prepare sponsor entry
+        id: parse
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_BODY: ${{ github.event.issue.body }}
@@ -136,34 +137,39 @@ jobs:
           print(f'Added "{name}" to {tier} tier in {yaml_path}')
 
           logo_display = f'`{logo}`' if logo else '_none — add manually to `static/sponsorlogos/` before merging_'
+          pr_body = '\n'.join([
+              '## Sponsor Listing Update',
+              '',
+              '| Field | Value |',
+              '|-------|-------|',
+              f'| Event | `{event_slug}` |',
+              f'| Tier | {tier} |',
+              f'| Sponsor | {name} |',
+              f'| URL | {url or "_none_"} |',
+              f'| Logo | {logo_display} |',
+              '',
+              f'Opened from issue: {issue_url}',
+              '',
+              '**Review checklist before merging:**',
+              '- [ ] Sponsor name and tier are correct',
+              '- [ ] Logo renders correctly (check `static/sponsorlogos/`)',
+              '- [ ] Website URL is correct and publicly accessible',
+              '- [ ] Sponsor has paid or payment is confirmed',
+              '',
+              'Merge to publish the sponsor on the live site.',
+          ])
           with open('/tmp/pr_body.txt', 'w') as f:
-              f.write(f"""## Sponsor Listing Update
+              f.write(pr_body)
 
-| Field | Value |
-|-------|-------|
-| Event | `{event_slug}` |
-| Tier | {tier} |
-| Sponsor | {name} |
-| URL | {url or '_none_'} |
-| Logo | {logo_display} |
-
-Opened from issue: {issue_url}
-
-**Review checklist before merging:**
-- [ ] Sponsor name and tier are correct
-- [ ] Logo renders correctly (check `static/sponsorlogos/`)
-- [ ] Website URL is correct and publicly accessible
-- [ ] Sponsor has paid or payment is confirmed
-
-Merge to publish the sponsor on the live site.
-""")
-
+          logo_resolved = 'true' if logo else 'false'
           with open(github_env, 'a') as f:
               f.write(f'SPONSOR_SLUG={name_to_slug(name)}\n')
               f.write(f'EVENT_SLUG={event_slug}\n')
               f.write(f'TIER={tier}\n')
               f.write(f'SPONSOR_NAME={name}\n')
-              f.write(f'LOGO_RESOLVED={"true" if logo else "false"}\n')
+          github_output = os.environ['GITHUB_OUTPUT']
+          with open(github_output, 'a') as f:
+              f.write(f'LOGO_RESOLVED={logo_resolved}\n')
           PYEOF
 
       - name: Post error comment
@@ -196,14 +202,15 @@ Merge to publish the sponsor on the live site.
 
           echo "PR_URL=$pr_url" >> "$GITHUB_ENV"
 
-          gh issue comment "${{ github.event.issue.number }}" --body "## PR Ready for Review
-
-The sponsor listing PR is open and ready: $pr_url
-
-Verify the logo and details look correct, then merge to publish."
+          printf '%s\n\n%s\n\n%s' \
+            '## PR Ready for Review' \
+            "The sponsor listing PR is open and ready: $pr_url" \
+            'Verify the logo and details look correct, then merge to publish.' \
+            > /tmp/pr_comment.txt
+          gh issue comment "${{ github.event.issue.number }}" --body-file /tmp/pr_comment.txt
 
       - name: Auto-merge if logo is resolved
-        if: env.LOGO_RESOLVED == 'true'
+        if: steps.parse.outputs.LOGO_RESOLVED == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
