@@ -6,7 +6,4 @@ legacyName: SQL Saturday Baton Rouge 2023 - BI Edition (#1045)
 legacyArchiveUrl: https://sqlsaturday.com/tags/#Baton%20Rouge
 ---
 
-This archived Event Year captures the separate 2023 BI Edition listing from the legacy SQLSaturday archive.
-
-- Legacy event name: **SQL Saturday Baton Rouge 2023 - BI Edition (#1045)**
-- Legacy archive reference: [SQLSaturday Baton Rouge history](https://sqlsaturday.com/tags/#Baton%20Rouge)
+SQL Saturday Baton Rouge 2023 - BI Edition (#1045) was a standalone business intelligence focused event held in March 2023, separate from the summer conference. Full session details are in the [SQLSaturday archive](https://sqlsaturday.com/tags/#Baton%20Rouge).

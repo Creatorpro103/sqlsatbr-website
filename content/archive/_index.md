@@ -4,6 +4,6 @@ description: Prior Event Years for Day of Data Baton Rouge and the earlier SQL S
 layout: archive-list
 ---
 
-The Archive preserves prior Event Years as the public site evolves. During phase one, these archive pages capture the Baton Rouge event history and point back to the legacy SQLSaturday archive where needed.
+Day of Data Baton Rouge has its roots in SQL Saturday Baton Rouge, which the Baton Rouge User Groups have hosted since 2015. The entries below capture that history — each links back to the legacy SQLSaturday archive for full session and speaker details.
 
-- [Review the broader SQLSaturday Baton Rouge history](https://sqlsaturday.com/tags/#Baton%20Rouge)
+- [Full SQLSaturday Baton Rouge history on sqlsaturday.com](https://sqlsaturday.com/tags/#Baton%20Rouge)
