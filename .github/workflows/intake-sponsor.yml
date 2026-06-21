@@ -103,6 +103,15 @@ jobs:
                   fail(f'Logo file `{static_path}` was not found in the repository.\n\nUpload the logo to `static/sponsorlogos/` and reopen this issue, or provide a Logo URL instead.')
               logo = logo_path
 
+          if not logo:
+              slug = name_to_slug(name)
+              for ext in ('png', 'svg', 'jpg', 'jpeg', 'webp'):
+                  candidate = f'static/sponsorlogos/{slug}.{ext}'
+                  if os.path.exists(candidate):
+                      logo = f'sponsorlogos/{slug}.{ext}'
+                      print(f'Auto-detected existing logo → {candidate}')
+                      break
+
           with open(yaml_path) as fh:
               data = yaml.safe_load(fh)
 
@@ -154,6 +163,7 @@ Merge to publish the sponsor on the live site.
               f.write(f'EVENT_SLUG={event_slug}\n')
               f.write(f'TIER={tier}\n')
               f.write(f'SPONSOR_NAME={name}\n')
+              f.write(f'LOGO_RESOLVED={"true" if logo else "false"}\n')
           PYEOF
 
       - name: Post error comment
@@ -184,8 +194,18 @@ Merge to publish the sponsor on the live site.
             --body-file /tmp/pr_body.txt \
             --base main)
 
+          echo "PR_URL=$pr_url" >> "$GITHUB_ENV"
+
           gh issue comment "${{ github.event.issue.number }}" --body "## PR Ready for Review
 
 The sponsor listing PR is open and ready: $pr_url
 
 Verify the logo and details look correct, then merge to publish."
+
+      - name: Auto-merge if logo is resolved
+        if: env.LOGO_RESOLVED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr merge "$PR_URL" --squash \
+            --subject "Add ${SPONSOR_NAME} as ${TIER} sponsor (${EVENT_SLUG})"

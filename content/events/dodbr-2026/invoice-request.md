@@ -3,6 +3,7 @@ title: Sponsor Sign-Up
 description: Sign up to sponsor Day of Data Baton Rouge 2026 and pay your invoice online — by card, PayPal, or AP/check.
 layout: invoice-request
 workerEndpoint: https://sqlsatbr-website.kneal30.workers.dev/api/invoice-request
+eventSlug: dodbr-2026
 aliases: ["/invoice-request/"]
 build:
   list: never

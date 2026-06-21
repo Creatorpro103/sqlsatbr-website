@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildPayPalPayload, validateSubmission } from "./index.js";
+import { buildPayPalPayload, validateSubmission, buildGitHubIssueBody } from "./index.js";
 
 const baseSubmission = {
   eventName: "Test Event 2027",
@@ -27,6 +27,45 @@ describe("buildPayPalPayload", () => {
     const payload = buildPayPalPayload(baseSubmission, "250.00");
 
     expect(payload.items[0].unit_amount.value).toBe("250.00");
+  });
+});
+
+describe("buildGitHubIssueBody", () => {
+  it("includes structured fields parseable by intake-sponsor workflow", () => {
+    const body = buildGitHubIssueBody(
+      { ...baseSubmission, eventSlug: "test-event-2027", sponsorPackage: "Bronze" },
+      "DODBR-BRONZE-20270101120000",
+      "250.00",
+    );
+
+    expect(body).toContain("### Sponsor Tier\nBronze");
+    expect(body).toContain("### Event\ntest-event-2027");
+    expect(body).toContain("### Sponsor Name\nAcme Corp");
+    expect(body).toContain("### Sponsor Website URL\nhttps://acme.com");
+  });
+
+  it("uses _No response_ placeholder when logoUrl is empty", () => {
+    const body = buildGitHubIssueBody(
+      { ...baseSubmission, eventSlug: "test-event-2027", logoUrl: "" },
+      "DODBR-BRONZE-20270101120000",
+      "250.00",
+    );
+
+    expect(body).toContain("### Logo URL\n_No response_");
+  });
+
+  it("includes invoice reference in body without PII", () => {
+    const body = buildGitHubIssueBody(
+      { ...baseSubmission, eventSlug: "test-event-2027" },
+      "DODBR-BRONZE-20270101120000",
+      "250.00",
+    );
+
+    expect(body).toContain("DODBR-BRONZE-20270101120000");
+    expect(body).not.toContain("jane@acme.com");
+    expect(body).not.toContain("ap@acme.com");
+    expect(body).not.toContain("555-1234");
+    expect(body).not.toContain("Jane Doe");
   });
 });
 
