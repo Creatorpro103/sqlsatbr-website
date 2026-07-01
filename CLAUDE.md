@@ -1,0 +1,119 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this is
+
+The public Hugo site plus a Cloudflare Worker companion for **Day of Data Baton Rouge**
+(formerly SQL Saturday Baton Rouge). The site is a static Hugo build deployed to GitHub
+Pages; the Worker is a separate small service that handles sponsor invoice intake via
+PayPal and keeps private billing data out of the public repo (see
+`docs/adr/0002-use-a-cloudflare-worker-companion.md`).
+
+## Commands
+
+### Hugo site
+
+```powershell
+hugo server              # local preview at http://localhost:1313/sqlsatbr-website/
+hugo server --baseURL http://localhost:1313/   # override base path while previewing
+hugo --minify             # production build (matches the CI build), outputs to ./public
+```
+
+> **Current hosting note:** the site is temporarily published at
+> `https://kennyneal.github.io/sqlsatbr-website/` for preview, so `baseURL` in
+> `hugo.yaml` and local preview URLs carry the `/sqlsatbr-website/` path prefix. When
+> cutting over to the live domain, restore `static/CNAME` (`www.dayofdatabr.org`) and
+> set `baseURL: https://www.dayofdatabr.org/` in `hugo.yaml`.
+
+### Cloudflare Worker (`worker/`)
+
+```powershell
+cd worker
+npm test                  # vitest run — runs worker/src/index.test.js
+```
+
+There is no separate lint/build step for the Worker; `wrangler.jsonc` (repo root)
+points Cloudflare at `worker/src/index.js` as the deploy entrypoint.
+
+## Publication flow
+
+All public site changes go through a **Publication PR**: branch → PR → merge to
+`main` → GitHub Actions deploys to GitHub Pages. Nothing publishes directly.
+
+- `.github/workflows/publish-site.yml` builds the Hugo site on every PR (build-only
+  check) and deploys on push to `main`.
+- `.github/workflows/publish-sponsor.yml` is a `workflow_dispatch` job organizers run
+  manually to add a sponsor: it edits `content/events/<slug>/sponsors.yaml` (optionally
+  downloading a logo into `static/sponsorlogos/`), then opens a PR for review. It does
+  **not** commit straight to `main`.
+
+## Architecture: the event model
+
+The site is **multi-event, data-driven, and feature-by-presence** — there's no
+per-year rollover step and no template edits needed to add or retire an event. This is
+the load-bearing concept for almost all content changes; see `docs/runbook.md` for the
+step-by-step editor guide. Key points:
+
+- **An event is a content section**: `content/events/<slug>/_index.md` with
+  `layout: event`. All event-specific values (dates, registration/Sessionize/volunteer
+  URLs, venue info, theme overrides) live in that file's front matter.
+- **Sub-pages are optional and thin**: `schedule.md`, `speakers.md`, `precons.md`,
+  `sponsors.md` under the event folder each just point their layout back at data on the
+  parent event (`.Parent.Params`) or a sibling YAML file (`sponsors.yaml`,
+  `precons.yaml`). Only create the ones an event actually has — a lightweight event
+  (e.g. no PreCons) simply omits those files/data, and the corresponding nav/section
+  disappears with no layout changes.
+- **Upcoming vs. past is computed, not curated**: `layouts/index.html` and
+  `layouts/events/list.html` compare each event's `startDate` to `now`. The home page
+  features the soonest upcoming event (falling back to the most recent past event if
+  there is no upcoming one, so home is never blank) via
+  `layouts/partials/featured-event.html`. Once an event's date passes it automatically
+  moves from "upcoming" to the Past Events page — no manual archiving.
+  `content/archive/` holds only legacy pre-migration history below that list.
+  **Gotcha:** Hugo lowercases front matter param keys, so template queries must use
+  `.Params.startdate`, not `.Params.startDate`.
+- **Theming is data, not code**: site-wide default logo/colors live in `hugo.yaml`
+  under `params`; any event can override `logo`/`primaryColor`/`secondaryColor` in its
+  own front matter. `layouts/_default/baseof.html` resolves the active theme (event
+  override > site default) and injects `--brand-primary`/`--brand-secondary` as inline
+  CSS vars; `static/site.css` derives the darker gradient/footer shade from
+  `--brand-primary` via `color-mix`. The home page inherits the featured event's theme
+  automatically.
+- **Sponsors** are pure data: `content/events/<slug>/sponsors.yaml` groups sponsors by
+  `tier` (`global`, `platinum`, `facility`, `gold`, `silver` — tied to sizing rules in
+  `static/site.css`; new tiers render but without matching styles). Sponsor logos live
+  under `static/sponsors/<slug>/` per the runbook, though the automated
+  `publish-sponsor.yml` workflow drops downloaded/manual logos in
+  `static/sponsorlogos/` instead — check where an event's existing logos actually live
+  before adding a new one.
+
+## Architecture: Worker (`worker/src/index.js`)
+
+Single-file Worker handling sponsor invoicing, exporting a default `fetch` handler plus
+a couple of pure functions (`buildPayPalPayload`, `validateSubmission`) that
+`index.test.js` unit-tests directly.
+
+- `GET /health` — checks PayPal config and fetches a live OAuth token.
+- `POST /api/invoice-request` — validates the sponsor submission, builds and sends a
+  PayPal invoice for the requested `sponsorPackage` (rates hardcoded in
+  `PACKAGE_PRICING`), then best-effort mirrors the submission into an organizer Google
+  Sheet via `relayToGoogleForm` (controlled by the `GOOGLE_FORM_RESPONSE_URL` /
+  `GOOGLE_FORM_ENTRY_MAP` env vars — silently skipped if unset, and failures there never
+  block the invoice response).
+- Responses are content-negotiated: `respondForRequest` returns JSON by default or a
+  minimal HTML confirmation page if the request's `Accept` header prefers `text/html`
+  (used by the plain-HTML form fallback at `content/invoice-request.md` /
+  `layouts/_default/invoice-request.html`).
+- CORS is allow-listed via `ALLOWED_ORIGINS` (production domains + the GitHub Pages
+  preview host + `localhost:1313`) — update this list if the preview or production host
+  changes.
+- Required secrets: `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENV`
+  (`sandbox`|`live`). Optional: `PAYPAL_INVOICER_EMAIL`.
+
+## Domain language
+
+`CONTEXT.md` defines the project's controlled vocabulary (Event Year, Sponsor Package,
+Sponsor Listing, Publication PR, Sponsor Intake, Sponsor Case, Package Inventory, etc.)
+with terms to avoid for each. Prefer these terms in code, comments, docs, and PR
+descriptions over the "avoid" synonyms listed there.
