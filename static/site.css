@@ -669,6 +669,12 @@ body {
   color: var(--brand-muted);
 }
 
+.precon-teaser-time {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--brand-muted);
+}
+
 .precon-teaser-price {
   margin: 0.15rem 0 0;
   font-weight: 700;

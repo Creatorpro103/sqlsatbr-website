@@ -67,6 +67,7 @@
                   {{ with $p.credential }}<p class="precon-credential">{{ . }}</p>{{ end }}
                   <h3 class="precon-teaser-name">{{ $p.title }}</h3>
                   <p class="precon-teaser-instructor">{{ $p.name }}</p>
+                  {{ with $p.time }}<p class="precon-teaser-time">{{ . }}</p>{{ end }}
                   {{ with $p.price }}<p class="precon-teaser-price">{{ . }}</p>{{ end }}
                 </div>
               </article>
