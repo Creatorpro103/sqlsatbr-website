@@ -548,8 +548,8 @@ body {
 }
 
 /* Compact speaker wall (event home page) — the wall view has no built-in
-   paging, so shrink it down and collapse it behind a "Show all" toggle
-   instead of letting 40+ speaker photos dominate the page. */
+   paging, so shrink the cards down to keep the full roster from dominating
+   the page even though it's shown all at once. */
 .speakers-embed .sz-speakers--wall .sz-speaker {
   width: 6.5rem !important;
   padding: 0.25rem !important;
@@ -570,46 +570,6 @@ body {
 
 .speakers-embed .sz-speaker--compact .sz-speaker__tagline {
   display: none !important;
-}
-
-.speakers-wall {
-  position: relative;
-  max-height: 15rem;
-  overflow: hidden;
-}
-
-.speakers-wall::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 3.5rem;
-  background: linear-gradient(to bottom, transparent, #ffffff);
-}
-
-.speakers-expand-toggle {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.speakers-expand-toggle:checked ~ .speakers-wall {
-  max-height: none;
-}
-
-.speakers-expand-toggle:checked ~ .speakers-wall::after {
-  display: none;
-}
-
-.speakers-expand-label {
-  display: inline-block;
-  margin-top: 0.75rem;
-  font-weight: 700;
-  color: var(--brand-primary);
-  cursor: pointer;
-}
-
-.speakers-expand-toggle:checked ~ .speakers-expand-label {
-  display: none;
 }
 
 /* PreCon speaker + session cards */
