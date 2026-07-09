@@ -970,31 +970,16 @@ a {
 }
 
 .sponsor-grid {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
-  grid-template-columns: 1fr;
   justify-content: center;
-}
-
-.sponsor-grid-global {
-  grid-template-columns: minmax(0, 22rem);
-}
-
-.sponsor-grid-facility {
-  grid-template-columns: minmax(0, 20rem);
-}
-
-.sponsor-grid-facility,
-.sponsor-grid-platinum,
-.sponsor-grid-gold,
-.sponsor-grid-silver,
-.sponsor-grid-bronze,
-.sponsor-grid-book {
-  align-items: stretch;
 }
 
 .sponsor-card {
   display: flex;
+  flex: 1 1 100%;
+  max-width: 100%;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -1008,6 +993,16 @@ a {
   text-decoration: none;
   overflow: hidden;
   box-sizing: border-box;
+}
+
+.sponsor-card-global {
+  flex-basis: 22rem;
+  max-width: 22rem;
+}
+
+.sponsor-card-facility {
+  flex-basis: 20rem;
+  max-width: 20rem;
 }
 
 .sponsor-card-global,
@@ -1143,42 +1138,48 @@ a {
 }
 
 @media (min-width: 40rem) {
-  .sponsor-grid-platinum {
-    grid-template-columns: repeat(2, minmax(0, 22rem));
+  .sponsor-card-platinum {
+    flex: 0 1 22rem;
+    max-width: 22rem;
   }
 
-  .sponsor-grid-gold {
-    grid-template-columns: repeat(2, minmax(0, 18rem));
+  .sponsor-card-gold {
+    flex: 0 1 18rem;
+    max-width: 18rem;
   }
 
-  .sponsor-grid-silver,
-  .sponsor-grid-bronze,
-  .sponsor-grid-book {
-    grid-template-columns: repeat(auto-fit, minmax(7rem, 16rem));
+  .sponsor-card-silver,
+  .sponsor-card-bronze,
+  .sponsor-card-book {
+    flex: 0 1 16rem;
+    max-width: 16rem;
+    min-width: 7rem;
   }
 }
 
 @media (min-width: 60rem) {
-  .sponsor-grid-gold {
-    grid-template-columns: repeat(3, minmax(0, 16rem));
+  .sponsor-card-gold {
+    flex-basis: 16rem;
+    max-width: 16rem;
   }
 
-  .sponsor-grid-silver,
-  .sponsor-grid-bronze,
-  .sponsor-grid-book {
-    grid-template-columns: repeat(auto-fit, minmax(7rem, 12rem));
+  .sponsor-card-silver,
+  .sponsor-card-bronze,
+  .sponsor-card-book {
+    max-width: 12rem;
   }
 }
 
 @media (min-width: 72rem) {
-  .sponsor-grid-gold {
-    grid-template-columns: repeat(4, minmax(0, 14rem));
+  .sponsor-card-gold {
+    flex-basis: 14rem;
+    max-width: 14rem;
   }
 
-  .sponsor-grid-silver,
-  .sponsor-grid-bronze,
-  .sponsor-grid-book {
-    grid-template-columns: repeat(auto-fit, minmax(7rem, 11rem));
+  .sponsor-card-silver,
+  .sponsor-card-bronze,
+  .sponsor-card-book {
+    max-width: 11rem;
   }
 }
 
