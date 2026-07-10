@@ -19,15 +19,15 @@ SQL Server & database administrators, BI and ETL developers, data analysts, C#/.
 
 | Benefit | Blog $50 | Bronze $250 | Silver $600 | Unattended Booth $1750 | Gold $1500 | Platinum $2500 |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Logo on Website | Yes | Yes | Yes | Yes | Yes | Yes |
-| Your Swag in 450 Bags | No | No | Yes | Yes | Yes | Yes |
-| Raffle Ticket for Day-End Raffle | No | No | Yes | Yes | Yes | Yes |
-| Booth Space | No | No | Small | Small | Large | Large |
-| Attendee Contact List (Excel format) | No | No | No | Yes | Yes | Yes |
-| Banquet Invitations | No | No | No | No | Yes | Yes |
-| Email Blast to Opted-In Attendees | No | No | No | No | Yes | Yes (x2) |
-| Exclusive Presence Options | No | No | No | No | No | Yes |
-| Premium Booth Space | No | No | No | No | No | Available |
+| Logo on Website | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Your Swag in 450 Bags | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Raffle Ticket for Day-End Raffle | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Booth Space | <span style="color:red">✘</span> | <span style="color:red">✘</span> | Small | Small | Large | Large |
+| Attendee Contact List (Excel format) | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Banquet Invitations | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:green">✔</span> | <span style="color:green">✔</span> |
+| Email Blast to Opted-In Attendees | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:green">✔</span> | <span style="color:green">✔ (x2)</span> |
+| Exclusive Presence Options | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:green">✔</span> |
+| Premium Booth Space | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | <span style="color:red">✘</span> | Available |
 
 Booth space is **limited and reserved first-come, first-served at time of payment** — we've sold out a month early the last two years. Silver, Gold, and Unattended Booth tiers each have only a handful of spots.
 
