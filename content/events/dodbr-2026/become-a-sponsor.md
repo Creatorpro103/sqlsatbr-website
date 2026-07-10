@@ -19,15 +19,15 @@ SQL Server & database administrators, BI and ETL developers, data analysts, C#/.
 
 | Benefit | Blog $50 | Bronze $250 | Silver $600 | Unattended Booth $1750 | Gold $1500 | Platinum $2500 |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Logo on Website | Yes | Yes | Yes | Yes | Yes | Yes |
-| Your Swag in 450 Bags | No | No | Yes | Yes | Yes | Yes |
-| Raffle Ticket for Day-End Raffle | No | No | Yes | Yes | Yes | Yes |
-| Booth Space | No | No | Small | Small | Large | Large |
-| Attendee Contact List (Excel format) | No | No | No | Yes | Yes | Yes |
-| Banquet Invitations | No | No | No | No | Yes | Yes |
-| Email Blast to Opted-In Attendees | No | No | No | No | Yes | Yes (x2) |
-| Exclusive Presence Options | No | No | No | No | No | Yes |
-| Premium Booth Space | No | No | No | No | No | Available |
+| Logo on Website | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Your Swag in 450 Bags | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Raffle Ticket for Day-End Raffle | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Booth Space | ❌ | ❌ | Small | Small | Large | Large |
+| Attendee Contact List (Excel format) | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Banquet Invitations | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Email Blast to Opted-In Attendees | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ (x2) |
+| Exclusive Presence Options | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Premium Booth Space | ❌ | ❌ | ❌ | ❌ | ❌ | Available |
 
 Booth space is **limited and reserved first-come, first-served at time of payment** — we've sold out a month early the last two years. Silver, Gold, and Unattended Booth tiers each have only a handful of spots.
 
